@@ -1,0 +1,28 @@
+{
+  "name": "learnfromchef",
+  "version": "1.0.0",
+  "description": "A problem recommendation and learning platform based on codechef.",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaithak/Codechef-Hackathon.git"
+  },
+  "keywords": [
+    "codechef",
+    "hackathon",
+    "learner"
+  ],
+  "author": "Vaibhav Thakkar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vaithak/Codechef-Hackathon/issues"
+  },
+  "homepage": "https://github.com/vaithak/Codechef-Hackathon#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "particles.js": "^2.0.0"
+  }
+}
