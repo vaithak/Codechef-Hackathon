@@ -44,7 +44,6 @@ var strategy = new OAuth2Strategy({
         User.findOne({codechefId: username}).then(function(currentUser){
             if(currentUser)
             {
-                console.log('user is: ', currentUser);
                 done(null, currentUser);
             }
             else
@@ -53,7 +52,6 @@ var strategy = new OAuth2Strategy({
                     codechefId: username,
                     refreshToken: refreshToken,
                 }).save().then(function(newUser) {
-                    console.log('created new user: ', newUser);
                     done(null, newUser);
                 });
             }
