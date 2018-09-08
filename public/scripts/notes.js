@@ -88,15 +88,35 @@ function newNote() {
 };
 
 
-
+// Retreiving Notes if any
 $(document).ready(function() {
-
     $("#board").height($(document).height());
-
     $("#add_new").click(newNote);
-
     $('.remove').click(deleteNote);
-    newNote();
+
+    $.ajax({
+       type: "POST",
+       url: "/notes/retreive",
+       success: function(result){
+         if(result.length > 0)
+         {
+           // Creating notes
+           for(var i=0;i<result.length;i++)
+            newNote();
+
+           // Writing data into notes
+           $('.note_cnt').each(function(i, obj) {
+             $(obj).children('.title').val(result[i]['title']);
+             $(obj).children('.cnt').val(result[i]['text']);
+           });
+
+         }
+         else
+         {
+           newNote();
+         }
+       }
+    });
 
     return false;
 });
