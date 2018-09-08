@@ -11,6 +11,6 @@ app.get('/', function(req, res){
 //   console.log('callback - particles.js config loaded');
 // });
 
-app.listen(3000, function(){
-  console.log('Example app listening on port 3000!')
+app.listen(80, function(){
+  console.log('App listening on port 80!')
 })
