@@ -1,4 +1,15 @@
 /* * Hide from both screenreaders and browsers: h5bp.com/u */
+body{
+  font-size: 1em;
+  line-height: 1;
+  height:100%;
+  width: 100%;
+  background-image: url("/images/notesBack.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .hidden {
   display: none !important;
   visibility: hidden;
@@ -66,13 +77,6 @@ input,
 select,
 textarea {
   color: #000000;
-}
-
-body {
-  font-size: 1em;
-  line-height: 1;
-  background-color: white;
-  background: linear-gradient(135deg, white 0%, #ebebeb 47%, #dedede 100%);
 }
 
 ::-moz-selection {

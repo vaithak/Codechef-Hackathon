@@ -2,6 +2,7 @@ const express = require('express');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const authRoutes = require('./routes/authRoutes');
+const notesRoutes = require('./routes/notesRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const passportSetup = require('./config/passportSetup');
 const mongoose = require('mongoose');
@@ -25,13 +26,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // connect to mongodb
-mongoose.connect(keys.mongodb.dbURI, function() {
+mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
     console.log('connected to mongodb');
 });
 
 // set up routes
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
+app.use('/notes', notesRoutes);
 
 app.get('/', function(req, res){
   if(req.user)
