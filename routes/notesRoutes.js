@@ -16,6 +16,7 @@ router.get('/', authCheck, function(req, res){
     res.render('notes', { user: req.user.codechefId });
 });
 
+// Endpoint for saving the user's notes
 router.post('/save', authCheck, function(req, res){
     var notes = req.body.allNotes;
     User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'notes': notes}}, function(err, doc){
@@ -27,5 +28,13 @@ router.post('/save', authCheck, function(req, res){
     });
 
 });
+
+// Endpoint for Retreiving notes of a user
+router.post('/retreive', authCheck, function(req, res){
+    User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
+      res.send(currentUser.notes);
+    });
+});
+
 
 module.exports = router;
