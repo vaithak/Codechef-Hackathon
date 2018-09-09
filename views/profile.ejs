@@ -222,8 +222,17 @@
     </div>
   </div>
 
-
+<script type="text/javascript">
+var data = <%- JSON.stringify(result['submissionStats']) %>;
+var newData = [
+    {title: "Accepted Submissions", value: data['acceptedSubmissions'], color: "#00ff00"},
+    {title: "Time Limit Exceeded", value: data['timeLimitExceed'], color: "#ffa500"},
+    {title: "Wrong Submissions", value: data['wrongSubmissions'], color: "#E56255"},
+    {title: "Run Time Error", value: data['runTimeError'], color: "#8B572A"},
+    {title: "Compilation Error", value: data['compilationError'], color: "#6F6D6D"},
+    {title: "Partially Solved Submissions", value: data['partiallySolvedSubmissions'], color: "#d6ba22"},
+  ];
+</script>
 <script type="text/javascript" src="/scripts/pieChart.js"></script>
-
 </body>
 </html>
