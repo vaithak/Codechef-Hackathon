@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/styles/profileStyle.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -17,7 +18,202 @@
 
   <% include ../partials/header %>
   <div id="mainBody">
-    <h1>Welcome to your profile, <%= user %></h1>
+    <div class="data container">
+      <div class="row">
+
+        <div class="col-lg-8 col-md-8 col-sm-12">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-1 col-md-1 col-sm-4">
+                <div class="container">
+                  <div class="row">
+                    <img class="img-circle" style="background-color: #cff" src = <%= "https://www.gravatar.com/avatar/" + gravatar + "?d=robohash" %> alt="gravatar">
+                  </div>
+                  <div class="row">
+                    <% var number = parseInt(result['band']['0']); %>
+                    <% if(number == 1)
+                        color="grey";
+                       else if(number == 2)
+                        color="green";
+                      else if(number == 3)
+                          color="blue";
+                      else if(number == 4)
+                        color= "purple";
+                      else if(number == 5)
+                        color= "yellow";
+                      else if(number == 6)
+                        color= "orange";
+                      else if(number == 7)
+                        color= "red";
+                    %>
+                    <% for(var i=0; i < number ; i++) { %>
+                      <span <%= "style=color:" + color %> class="fa fa-star checked"></span>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-11 col-md-11 col-sm-8">
+                <h2 style="vertical-align:bottom" class="stylish"><u><%= result['fullname'] %></u></h2>
+              </div>
+            </div>
+          </div>
+          <hr style="position:relative;border: 2px solid black">
+
+
+          <div class="detailsAndStats shadow">
+            <div class="container-fluid">
+            <div class="row">
+              <section class="user-details">
+                <h3 class="text-center stylish"><u>Basic Info</u></h3>
+                <table class="table">
+                  <tr>
+                    <td>
+                      <label>Username:</label><span>&nbsp;&nbsp;<span class="rating" style="display: inline-block;
+                            font-size: 10px;
+                            background: #3366CC;
+                            padding: 0 3px;
+                            line-height: 1.3;
+                            color: white;
+                            margin-right: 2px;"> <%= result['band'][0] %>★</span><span>&nbsp; <%= user %></span></span>
+                  </td>
+                  </tr>
+
+                  <tr>
+                    <td><label>Country:</label><span>&nbsp;<img class="user-country-flag" src="https://codechef.com/download/flags/24/<%= result['country']['code'].toLowerCase() %>.png">&nbsp;&nbsp;<span class="user-country-name" style="vertical-align:top"><%= result['country']['name'] %></span></span></td></tr>
+                  <tr>
+                    <td><label>State:</label><span>&nbsp;<%= result['state']['name'] %></span></td>
+                  </tr>
+                  <tr>
+                    <td><label>City:</label><span>&nbsp;<%= result['city']['name'] %></span></td>
+                  </tr>
+
+
+                  <tr>
+                    <td><label>Student/Professional:</label><span>&nbsp;<%= result['occupation'] %></span></td>
+                  </tr>
+                  <tr>
+                    <td><label>Institution:</label><span>&nbsp;<%= result['organization'] %></span></td>
+                  </tr>
+                </table>
+              </section>
+            </div>
+          </div>
+          </div>
+        </div>
+        <br><br><br><br><br><br>
+
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 pull-right">
+          <div class="content">
+            <div class="rating-header text-center">
+              <div class="rating-number"><u><%= result['ratings']['allContest'] %></u></div>
+              <h5 style="color:blue">CodeChef Rating</h5>
+            </div>
+			      <br>
+          <div class="rating-ranks text-center">
+              <ul class="list-inline">
+                  <li>
+					            <div class="rank-number"><u><%= result['rankings']['allContestRanking']['global'] %></u></div>
+                      <p><small>Global Rank</small></p>
+                  </li>&nbsp;&nbsp;&nbsp;
+                  <li>
+                      <div class="rank-number"><u><%= result['rankings']['allContestRanking']['country'] %></u></div>
+                      <p><small>Country Rank</small></p>
+                  </li>
+              </ul>
+          </div>
+          <br>
+          <div class="widget-small-table">
+              <table style="width:100%" class="table-striped">
+                <thead style="background-color:#eee">
+                  <tr rowspan="1">
+                    <th><strong>Contests</strong></th>
+                    <th><strong>Rating</strong></th>
+                    <th><strong>Global<br>Rank</strong></th>
+                    <th><strong>Country<br>Rank</strong></th>
+                  </tr>
+                </thead>
+                <tbody><tr>
+                  <td><strong>Long<br> Challenge</strong></td>
+                  <td><%= result['ratings']['long'] %></td>
+                  <td><%= result['rankings']['longRanking']['global'] %></td>
+                  <td><%= result['rankings']['longRanking']['country'] %></td>
+                </tr>
+                <tr>
+                  <td><strong>Cook-off</strong></td>
+                  <td><%= result['ratings']['short'] %></td>
+                  <td><%= result['rankings']['shortRanking']['global'] %></td>
+                  <td><%= result['rankings']['shortRanking']['country'] %></td>
+                </tr>
+                <tr>
+                  <td><strong>Lunch<br>Time</strong></td>
+                  <td><%= result['ratings']['lTime'] %></td>
+                  <td><%= result['rankings']['ltimeRanking']['global'] %></td>
+                  <td><%= result['rankings']['ltimeRanking']['country'] %></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="content">
+            <div class="rating-header text-center">
+              <h5> Junior </h5>
+              <div class="rating-number"><u><%= result['ratings']['allSchoolContest'] %></u></div>
+              <h5 style="color:blue">CodeChef Rating</h5>
+            </div>
+			<br>
+          <div class="rating-ranks text-center">
+              <ul class="list-inline">
+                  <li>
+					            <div class="rank-number"><u><%= result['rankings']['allSchoolRanking']['global'] %></u></div>
+                      <p><small>Global Rank</small></p>
+                  </li>&nbsp;&nbsp;&nbsp;
+                  <li>
+                      <div class="rank-number"><u><%= result['rankings']['allSchoolRanking']['country'] %></u></div>
+                      <p><small>Country Rank</small></p>
+                  </li>
+              </ul>
+          </div>
+          <br>
+          <div class="widget-small-table">
+              <table style="width:100%;" class="table-striped ">
+                <thead style="background-color:#eee">
+                  <tr rowspan="1">
+                    <th><strong>Contests</strong></th>
+                    <th><strong>Rating</strong></th>
+                    <th><strong>Global<br>Rank</strong></th>
+                    <th><strong>Country<br>Rank</strong></th>
+                  </tr>
+                </thead>
+                <tbody><tr>
+                  <td><strong>Long<br> Challenge</strong></td>
+                  <td><%= result['ratings']['longSchool'] %></td>
+                  <td><%= result['rankings']['longSchoolRanking']['global'] %></td>
+                  <td><%= result['rankings']['longSchoolRanking']['country'] %></td>
+                </tr>
+                <tr>
+                  <td><strong>Cook-off</strong></td>
+                  <td><%= result['ratings']['shortSchool'] %></td>
+                  <td><%= result['rankings']['shortSchoolRanking']['global'] %></td>
+                  <td><%= result['rankings']['shortSchoolRanking']['country'] %></td>
+                </tr>
+                <tr>
+                  <td><strong>Lunch<br>Time</strong></td>
+                  <td><%= result['ratings']['lTimeSchool'] %></td>
+                  <td><%= result['rankings']['ltimeSchoolRanking']['global'] %></td>
+                  <td><%= result['rankings']['ltimeSchoolRanking']['country'] %></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+      </div>
+
+
+
+    </div>
+    </div>
   </div>
 
 </body>

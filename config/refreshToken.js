@@ -1,18 +1,40 @@
-var TokenProvider = require('refresh-token');
+const keys = require('./keys');
+const request = require('request-promise');
+const User = require('../models/userModel');
 
-function refreshAccessToken(refreshToken)
+function refreshAccessToken(refreshToken, username)
 {
-  var tokenProvider = new TokenProvider(keys.codechef.tokenURL, {
-      refresh_token: refreshToken,
-      client_id:     keys.codechef.clientID,
-      client_secret: keys.codechef.clientSecret
-    });
+  return new Promise(function(resolve, reject){
 
-  tokenProvider.getToken(function (err, token) {
-   //token will be a valid access token.
-   if(err) throw err;
-   return token;
-  });
+    var data = {
+      'grant_type'    : 'refresh_token',
+      'client_id'     :  keys.codechef.clientID,
+      'client_secret' :  keys.codechef.clientSecret,
+      'refresh_token' :  refreshToken,
+    };
+
+      var options = {
+        method: 'POST',
+        uri: keys.codechef.tokenURL,
+        headers: {
+            'content-Type': 'application/json',
+        },
+        body: data,
+        json: true // Automatically parses the JSON string in the response
+      };
+
+      request(options)
+      .then(function (result) {
+        var refreshToken = result['result']['data']['refresh_token'];
+        User.findOneAndUpdate({codechefId: username},{refreshToken: refreshToken}).then(function(){
+            resolve(result['result']['data']['access_token']);
+        });
+      })
+      .catch(function (err) {
+          throw err;
+          reject(err);
+      });
+    });
 }
 
 module.exports.refreshAccessToken = refreshAccessToken;

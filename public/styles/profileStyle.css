@@ -1,5 +1,41 @@
-#mainBody h1{
-  position: absolute;
-  top:10%;
-  color: red;
+body{
+  font-size: 1em;
+  line-height: 1;
+  height:100%;
+  width: 100%;
+}
+
+#mainBody{
+  margin-top: 5%;
+}
+
+table{
+  border-collapse: separate !important;
+  border-spacing: 0 0.6em !important;
+}
+
+.rating-number{
+	font-size:40px;
+}
+
+.rank-number{
+	font-size:30px;
+}
+
+.content{
+	padding: 10px;
+	border:0.5px solid black;
+  box-shadow: 5px 5px 10px 5px #aaa;
+  opacity: 1;
+  background-color: white;
+}
+
+.shadow{
+  	box-shadow: 5px 5px 10px 5px #aaa;
+    opacity: 1;
+    background-color: white;
+}
+
+.stylish{
+  font-family: cursive;
 }
