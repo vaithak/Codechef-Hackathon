@@ -2,7 +2,7 @@ const keys = require('./keys');
 const request = require('request-promise');
 const User = require('../models/userModel');
 
-function refreshAccessToken(refreshToken, username)
+function refreshAccessToken(refreshToken, username, req, res)
 {
   return new Promise(function(resolve, reject){
 
@@ -31,8 +31,8 @@ function refreshAccessToken(refreshToken, username)
         });
       })
       .catch(function (err) {
-          throw err;
-          reject(err);
+        req.logout();
+        res.redirect('/');
       });
     });
 }

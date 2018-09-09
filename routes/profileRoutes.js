@@ -16,7 +16,7 @@ router.get('/', authCheck, function(req, res){
   User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
     if(currentUser)
     {
-      refreshToken.refreshAccessToken(currentUser['refreshToken'], req.user.codechefId).then(function(accessToken){
+      refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
         var options = {
           method: 'GET',
           uri: 'https://api.codechef.com/users/me',
