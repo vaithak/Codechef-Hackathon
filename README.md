@@ -13,7 +13,7 @@ Team submission for CodeChef and Alibaba Hackathon.
   * jQuery
   * Bootstrap v3
   
-## Live On - 
+#### Link - 
  http://149.129.138.50
 
 Team Members
