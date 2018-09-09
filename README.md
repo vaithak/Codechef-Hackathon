@@ -1,5 +1,20 @@
 # Codechef-Hackathon
-My submission for CodeChef and Alibaba Hackathon.
+Team submission for CodeChef and Alibaba Hackathon.  
+
+### Project Name: - LearnFromChef
+
+### Technologies Used
+  * NodeJS
+  * ExpressJS
+  * mongodb
+  * d3.js
+  * Alibaba Elastic Compute Service
+  * Alibaba AsparaDB for MongoDB
+  * Codechef Problems and User Stats
+  * jQuery
+  * Bootstrap v3
+  
+#### Link - [http://149.129.138.50](http://149.129.138.50)  
 
 Team Members
 1) Vaibhav Thakkar - [@vaithak](https://github.com/vaithak)  

@@ -17,6 +17,7 @@ router.get('/callback',
     if (!req.user) {
       console.log("hi");
       throw new Error('user null');
+      res.redirect('/error.html');
     }
     res.redirect('/profile/');
   }

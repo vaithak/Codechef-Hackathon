@@ -40,8 +40,7 @@ var strategy = new OAuth2Strategy({
     request(options)
     .then(function (result) {
         var username = result['result']['data']['content']['username'];
-
-        User.findOne({codechefId: username}).then(function(currentUser){
+        User.findOneAndUpdate({codechefId: username},{refreshToken: refreshToken}).then(function(currentUser){
             if(currentUser)
             {
                 done(null, currentUser);
