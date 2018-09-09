@@ -46,6 +46,8 @@ app.get('/', function(req, res){
   }
 });
 
-app.listen(80, function(){
-  console.log('App listening on port 80!')
+const port = process.env.port || 80;
+
+app.listen(port, function(){
+  console.log('App listening! on port ' + port);
 })
