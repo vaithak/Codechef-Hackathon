@@ -13,7 +13,8 @@ Team submission for CodeChef and Alibaba Hackathon.
   * jQuery
   * Bootstrap v3
   
-## Live On - https://149.129.138.50
+## Live On - 
+ http://149.129.138.50
 
 Team Members
 1) Vaibhav Thakkar - [@vaithak](https://github.com/vaithak)  
