@@ -19,7 +19,7 @@
 
   <% include ../partials/header %>
   <div id="mainBody">
-    <div class="data container">
+    <div class="data container-fluid">
       <div class="row">
 
         <div class="col-lg-8 col-md-8 col-sm-12">
@@ -66,6 +66,7 @@
             <div class="row">
               <section class="user-details">
                 <h3 class="text-center stylish"><u>Basic Info</u></h3>
+                <br>
                 <table class="table">
                   <tr>
                     <td>
@@ -101,9 +102,23 @@
           </div>
 
           <hr style="border: 1px solid black">
+          <h3 class="stylish text-center"><u>Recent Activity (Last 5 Days)</u></h3>
+          <br>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-8 col-md-10 col-sm-12 col-xs-12 col-lg-offset-1">
+                <svg class="line-chart"></svg>
+              </div>
+            </div>
+          </div>
+          <br>
+          <br>
 
+          <hr style="border: 1px solid black">
           <h3 class="stylish text-center"><u>Submission Stats</u></h3>
+          <br>
           <div id="pieChart" class="chart"></div>
+          <br>
 
           <hr style="border: 1px solid black">
 
@@ -292,9 +307,11 @@
     </div>
   </div>
 
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script type="text/javascript" src="/scripts/lineChart.js"></script>
 <script type="text/javascript">
 var data = <%- JSON.stringify(result['submissionStats']) %>;
-var newData = [
+var newPieData = [
     {title: "Accepted Submissions", value: data['acceptedSubmissions'], color: "#00ff00"},
     {title: "Time Limit Exceeded", value: data['timeLimitExceed'], color: "#ffa500"},
     {title: "Wrong Submissions", value: data['wrongSubmissions'], color: "#E56255"},
@@ -302,6 +319,13 @@ var newData = [
     {title: "Compilation Error", value: data['compilationError'], color: "#6F6D6D"},
     {title: "Partially Solved Submissions", value: data['partiallySolvedSubmissions'], color: "#d6ba22"},
   ];
+
+var submissionData = <%- JSON.stringify(resultSubmission) %>;
+
+var prev5Days = Last5Days();
+var newLineData = parseData(submissionData,prev5Days);
+drawLineChart(newLineData);
+
 </script>
 <script type="text/javascript" src="/scripts/pieChart.js"></script>
 </body>

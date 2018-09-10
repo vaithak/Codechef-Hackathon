@@ -1,5 +1,5 @@
 $(function(){
-  $("#pieChart").drawPieChart(newData);
+  $("#pieChart").drawPieChart(newPieData);
 });
 
 /*!
