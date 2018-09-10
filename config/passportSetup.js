@@ -40,7 +40,11 @@ var strategy = new OAuth2Strategy({
     request(options)
     .then(function (result) {
         var username = result['result']['data']['content']['username'];
-        User.findOneAndUpdate({codechefId: username},{refreshToken: refreshToken}).then(function(currentUser){
+        User.findOneAndUpdate({codechefId: username},{
+          refreshToken: refreshToken,
+          accessTokenTimeStamp: +(new Date().getTime()),
+          accessToken: accessToken
+        }).then(function(currentUser){
             if(currentUser)
             {
                 done(null, currentUser);
@@ -50,6 +54,8 @@ var strategy = new OAuth2Strategy({
                 new User({
                     codechefId: username,
                     refreshToken: refreshToken,
+                    accessToken: accessToken,
+                    accessTokenTimeStamp: +(new Date().getTime())
                 }).save().then(function(newUser) {
                     done(null, newUser);
                 });

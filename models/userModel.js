@@ -5,8 +5,10 @@ const userSchema = new Schema({
     refreshToken: String,
     codechefId:   String,
     thumbnail:    String,
+    accessTokenTimeStamp: Number,
+    accessToken: String,
     notes:        {type : Array , "default" : []},
-    email: 		  {type : String, "default" : ""},
+	email: 		  {type : String, "default" : ""},
     reminder:     {type : Boolean, "default" :false}
 });
 

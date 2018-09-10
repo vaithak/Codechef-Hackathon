@@ -1,6 +1,8 @@
 const router = require('express').Router();
+const request = require('request-promise');
 const User = require('../models/userModel');
 const MailList =require('../models/MailListModel');
+const refreshToken = require('../config/refreshToken');
 const bodyParser = require('body-parser');
 const authCheck = function(req, res, next){
     if(!req.user){
@@ -14,12 +16,75 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', authCheck, function(req, res){
-    // console.log(req.user);
+    console.log(req.user);
+    User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
+    if(currentUser)
+    {        
+        refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
+        var options = {
+          method: 'GET',
+          uri: 'https://api.codechef.com/contests?status=present',
+          headers: {
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ' + req.user.accessToken
+          },
+          json: true // Automatically parses the JSON string in the response
+        };
+
+        request(options)
+        .then(function (result) {
+          console.log(result['result']['data']['content']);
+          // res.render('profile', {
+          //   result: result['result']['data']['content'],
+          //   user: req.user.codechefId,
+          //   gravatar: md5(req.user.codechefId)
+          //  });
+         })
+        .catch(function (err) {
+            throw err;
+            console.log("Request error" + err);
+            res.redirect('/error.html');
+        });
+
+      });
+        refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
+        var options = {
+          method: 'GET',
+          uri: 'https://api.codechef.com/contests?status=future',
+          headers: {
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ' + req.user.accessToken
+          },
+          json: true // Automatically parses the JSON string in the response
+        };
+
+        request(options)
+        .then(function (result) {
+          console.log(result['result']['data']['content']);
+          // res.render('profile', {
+          //   result: result['result']['data']['content'],
+          //   user: req.user.codechefId,
+          //   gravatar: md5(req.user.codechefId)
+          //  });
+         })
+        .catch(function (err) {
+            throw err;
+            console.log("Request error" + err);
+            res.redirect('/error.html');
+        });
+
+      });
     res.render('contests', { 
         user: req.user.codechefId,
         email: req.user.email,
         reminder: req.user.reminder
      });
+    }
+    else
+    {
+      res.redirect('/error.html');
+    }
+  });
 });
 
 router.post('/email', authCheck, function(req, res){
@@ -67,13 +132,6 @@ router.post('/remind', authCheck, function(req, res){
     }
     
 
-});
-
-// Endpoint for Retreiving notes of a user
-router.post('/retreive', authCheck, function(req, res){
-    User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
-      res.send(currentUser.notes);
-    });
 });
 
 

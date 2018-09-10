@@ -27,17 +27,36 @@ router.get('/', authCheck, function(req, res){
           json: true // Automatically parses the JSON string in the response
         };
 
+        var optionSubmissions = {
+          method: 'GET',
+          uri: 'https://api.codechef.com/submissions/?result=AC&limit=20&username=' + req.user.codechefId,
+          headers: {
+              'Authorization': 'Bearer ' + accessToken
+          },
+          json: true
+        };
+
         request(options)
         .then(function (result) {
-          // console.log(result['result']['data']['content']);
-          res.render('profile', {
-            result: result['result']['data']['content'],
-            user: req.user.codechefId,
-            gravatar: md5(req.user.codechefId)
-           });
+
+          request(optionSubmissions)
+            .then(function(resultSubmission) {
+              // console.log(resultSubmission);
+
+              res.render('profile', {
+                result: result['result']['data']['content'],
+                resultSubmission: resultSubmission['result']['data']['content'],
+                user: req.user.codechefId,
+                gravatar: md5(req.user.codechefId)
+               });
+
+            })
+            .catch(function(err){
+              console.log("Request error" + err);
+              res.redirect('/error.html');
+            });
          })
         .catch(function (err) {
-            throw err;
             console.log("Request error" + err);
             res.redirect('/error.html');
         });

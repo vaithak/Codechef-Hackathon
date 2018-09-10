@@ -3,10 +3,13 @@ body{
   line-height: 1;
   height:100%;
   width: 100%;
+  overflow-x: hidden !important;
+  margin: 0px;
+  padding: 0px;
 }
 
 #mainBody{
-  margin-top: 5%;
+  margin-top: 9%;
 }
 
 table{
