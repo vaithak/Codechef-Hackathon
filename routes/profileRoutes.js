@@ -29,7 +29,7 @@ router.get('/', authCheck, function(req, res){
 
         request(options)
         .then(function (result) {
-          // console.log(result['result']['data']['content']);
+          console.log(result['result']['data']['content']);
           res.render('profile', {
             result: result['result']['data']['content'],
             user: req.user.codechefId,

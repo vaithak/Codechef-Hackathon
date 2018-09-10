@@ -101,8 +101,78 @@
           </div>
 
           <hr style="border: 1px solid black">
+
           <h3 class="stylish text-center"><u>Submission Stats</u></h3>
           <div id="pieChart" class="chart"></div>
+
+          <hr style="border: 1px solid black">
+
+          <h3 class="stylish text-center"><u>Problem Stats</u></h3>
+
+          <h4>Fully Solved (<%= parseInt(result['submissionStats']['solvedProblems']) - parseInt(result['submissionStats']['partiallySolvedProblems']) %>)</h4>
+          <% for(var contest in result['problemStats']['solved'] ) { %>
+          <br>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                <p><%= contest %></p>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-9 col-xs-9">
+                <% for(var i=1 ; i <= result['problemStats']['solved'][contest].length ; i++ ) {
+                    var currContest = result['problemStats']['solved'][contest][i-1]; %>
+                    <a href="https://www.codechef.com/problems/<%= currContest %>"><%= currContest %></a>&nbsp;&nbsp;
+                    <% if(i%6 == 0){ %>
+                      <br>
+                    <% } %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% } %>
+
+          <br><hr style="border: 0.4px solid black">
+          <h4>Partially Solved (<%= result['submissionStats']['partiallySolvedProblems'] %>)</h4>
+          <% for(var contest in result['problemStats']['partiallySolved'] ) { %>
+          <br>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                <p><%= contest %></p>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-9 col-xs-9">
+                <% for(var i=1 ; i <= result['problemStats']['partiallySolved'][contest].length ; i++ ) {
+                    var currContest = result['problemStats']['partiallySolved'][contest][i-1]; %>
+                    <a href="https://www.codechef.com/problems/<%= currContest %>"><%= currContest %></a>&nbsp;&nbsp;
+                    <% if(i%6 == 0){ %>
+                      <br>
+                    <% } %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% } %>
+
+          <br><hr style="border: 0.4px solid black">
+          <h4>Attempted Problems (<%= result['submissionStats']['attemptedProblems'] %>)</h4>
+          <% for(var contest in result['problemStats']['attempted'] ) { %>
+          <br>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                <p><%= contest %></p>
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-9 col-xs-9">
+                <% for(var i=1 ; i <= result['problemStats']['attempted'][contest].length ; i++ ) {
+                    var currContest = result['problemStats']['attempted'][contest][i-1]; %>
+                    <a href="https://www.codechef.com/problems/<%= currContest %>"><%= currContest %></a>&nbsp;&nbsp;
+                    <% if(i%6 == 0){ %>
+                      <br>
+                    <% } %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% } %>
 
           </div>
         </div>
