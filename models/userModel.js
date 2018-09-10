@@ -5,6 +5,8 @@ const userSchema = new Schema({
     refreshToken: String,
     codechefId:   String,
     thumbnail:    String,
+    accessTokenTimeStamp: Number,
+    accessToken: String,
     notes:        {type : Array , "default" : []}
 });
 

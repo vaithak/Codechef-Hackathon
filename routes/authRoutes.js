@@ -15,7 +15,6 @@ router.get('/callback',
   passport.authenticate('oauth2', { failureRedirect: '/auth/codechef' }),
   function(req, res) {
     if (!req.user) {
-      console.log("hi");
       throw new Error('user null');
       res.redirect('/error.html');
     }
