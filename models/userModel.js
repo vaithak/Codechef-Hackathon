@@ -5,7 +5,9 @@ const userSchema = new Schema({
     refreshToken: String,
     codechefId:   String,
     thumbnail:    String,
-    notes:        {type : Array , "default" : []}
+    notes:        {type : Array , "default" : []},
+    email: 		  {type : String, "default" : ""},
+    reminder:     {type : Boolean, "default" :false}
 });
 
 const User = mongoose.model('user', userSchema);

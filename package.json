@@ -33,6 +33,7 @@
     "passport-auth0": "^1.0.0",
     "passport-oauth2": "^1.4.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "nodemailer": "latest"
   }
 }
