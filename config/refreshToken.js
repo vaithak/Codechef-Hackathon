@@ -9,9 +9,11 @@ function refreshAccessToken(refreshToken, username, req, res)
     User.findOne({codechefId: username}).then(function(currentUser){
       var currTime = +(new Date().getTime());
       var diff = currTime - currentUser['accessTokenTimeStamp'];
-      if(diff < 1000*60*30)
+
+      // Refreshing only if time exceeds 45 minutes
+      if(diff < 1000*60*45)
       {
-        console.log("reduced");
+        // console.log("reduced");
         resolve(currentUser['accessToken']);
       }
       else
