@@ -15,22 +15,11 @@ var smtpTransport = nodemailer.createTransport({
         pass: ""
     }
 });
-var date= new Date();
-day=parseInt(date.getDate());
-month=parseInt(date.getMonth())+1;
-year=parseInt(date.getFullYear());
-while(true)
-{
-	var message=[];
-	var datenow=new Date();
-	daynow=parseInt(date.getDate());
-	monthnow=parseInt(date.getMonth())+1;
-	yearnow=parseInt(date.getFullYear());
-	if((daynow!=day)||(monthnow!=month)||(yearnow!=year))
-	{
-		day=daynow;
-		month=monthnow;
-		year=yearnow;
+setInterval(function(){
+	var date= new Date();
+	day=parseInt(date.getDate());
+	month=parseInt(date.getMonth())+1;
+	year=parseInt(date.getFullYear());
 		//error line
 	    refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
 		    var options = {
@@ -86,8 +75,7 @@ while(true)
 	        	});
 	         })
 	    });
-	}
-}
+	},1000*60*60*24);
 const port = process.env.port || 8080;
 
 app.listen(port, function(){
