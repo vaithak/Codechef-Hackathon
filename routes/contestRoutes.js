@@ -81,12 +81,8 @@ router.post('/email', authCheck, function(req, res){
     var email=req.body.email;
     User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'email': email}}, function(err, doc){
         console.log("Updated");
+        res.redirect('/contests/');
     });
-    res.render('contests',{
-        user: req.user.codechefId,
-        email: req.user.email,
-        reminder: req.user.reminder
-    })
 })
 // Endpoint for saving the user's notes
 router.post('/remind', authCheck, function(req, res){
