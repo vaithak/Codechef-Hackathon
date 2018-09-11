@@ -18,7 +18,7 @@ router.get('/', authCheck, function(req, res){
     if(currentUser)
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
-        if(currentUser['lastRecommended'])
+        if(Object.keys(currentUser['lastRecommended']).length != 0)
         {
           var options = {
             method: 'GET',
@@ -132,62 +132,20 @@ router.post('/recommend', authCheck, function(req, res){
     if(currentUser)
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
-        if(!currentUser['lastRecommended'])
-        {
-          var options = {
-            method: 'GET',
-            uri: 'https://api.codechef.com/submissions/?result=AC&username=' + req.user.codechefId + '&problemCode=' + currentUser['lastRecommended']['problemCode'],
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + accessToken
-            },
-            json: true
-          };
 
-          request(options)
-          .then(function (result) {
-            if(result['result']['data']['content'])
+        recommend(req.user.codechefId, accessToken).then(function(problem){
+          User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem}}, function(err,doc) {
+            if (err)
             {
-              res.send(currentUser['lastRecommended']);
+              console.log(err);
+              return res.status(500).send({ error: err });
             }
             else
             {
-              recommend(req.user.codechefId, accessToken).then(function(problem){
-                User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem}}, function(err,doc) {
-                  if (err)
-                  {
-                    console.log(err);
-                    return res.status(500).send({ error: err });
-                  }
-                  else
-                  {
-                    res.send(problem);
-                  }
-                });
-              });
+              res.send(problem);
             }
-           })
-          .catch(function (err) {
-              console.log("Request error" + err);
-              res.redirect('/error.html');
           });
-        }
-        else
-        {
-          recommend(req.user.codechefId, accessToken).then(function(problem){
-            User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem}}, function(err,doc) {
-              if (err)
-              {
-                console.log(err);
-                return res.status(500).send({ error: err });
-              }
-              else
-              {
-                res.send(problem);
-              }
-            });
-          });
-        }
+        });
 
       });
     }
