@@ -5,8 +5,8 @@ $(document).ready(function(){
        type: "POST",
        url: "/practise/submissions",
        success: function(result){
-         console.log(result);
 
+         $('.tableHead').empty();
          var head = " <tr>\
               <th>Id</th>\
               <th>Date</th>\
@@ -16,8 +16,9 @@ $(document).ready(function(){
               <th>Time</th>\
           </tr>";
 
-          $('.tableHead').append(head);
+        $('.tableHead').append(head);
 
+        $('.tableBody').empty();
          for(var i=0;i<result.length;i++)
          {
            var row = "<tr>\
@@ -39,4 +40,19 @@ $(document).ready(function(){
     });
   });
 
+
+  $('.recommend').on('click', function(){
+    $.ajax({
+       type: "POST",
+       url: "/practise/recommend",
+       success: function(result){
+         console.log(result);
+         $('.questionName > h3').html(result['problemName']);
+         $('.category').html(result['category']);
+         $('.problemCode').html(result['problemCode']);
+         $('.submissionDetails').html(result['successfulSubmissions']);
+         $('.accuracyDetail').html(result['accuracy']);
+       }
+    });
+  });
 });
