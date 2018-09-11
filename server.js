@@ -4,6 +4,7 @@ const passport = require('passport');
 const authRoutes = require('./routes/authRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const contestRoutes =require('./routes/contestRoutes');
 const passportSetup = require('./config/passportSetup');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
@@ -34,6 +35,7 @@ mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
 app.use('/notes', notesRoutes);
+app.use('/contests',contestRoutes);
 
 app.get('/', function(req, res){
   if(req.user)
@@ -49,5 +51,5 @@ app.get('/', function(req, res){
 const port = process.env.port || 80;
 
 app.listen(port, function(){
-  console.log('App listening! on port ' + port);
+  console.log("App listening on port " + port);
 })
