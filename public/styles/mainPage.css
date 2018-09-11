@@ -85,10 +85,8 @@ html,body {
 
 .top-image{
   position: absolute;
-  top: 0px;
-  left:30%;
-  border-radius: 50%;
-  background-color: white;
+  top: 0%;
+  left:0%;
   z-index: 1000;
 }
 
@@ -128,7 +126,7 @@ html,body {
 }
 
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 1100px) {
     .registration-form {
         position: absolute;
         top:20%;
@@ -139,6 +137,10 @@ html,body {
 
     .top-image{
       right:40%;
+    }
+
+    #mainBody{
+      height: 200%;
     }
 }
 
