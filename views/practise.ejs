@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Problem Recommender</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/styles/practiseStyle.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Gamja Flower' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<% include ../partials/practiseHeader %>
+
+	<div class="pageCenter">
+		<h1>Learn From Chef</h1>
+		<div class="buttons">
+			<button class="recommend">&nbsp;</button>
+			<button class="modal-trigger submissions" data-target="modal1">&nbsp;</button>
+		</div>
+		<br><br>
+		<div class="question">
+      		<header class="questionName">
+	        	<h3><%= problem['problemName'] %></h3>
+	      	</header>
+	      	<hr>
+	      	<div class="questionDetails">
+	      		<b>Problem Code: </b>&nbsp;<span class="problemCode"><%= problem['problemCode'] %></span>
+	      		<br>
+            <b>Category: </b>&nbsp;<span class="category"><%= problem['category'] %></span>
+            <br>
+	      		<div class="details">
+	      			<p class="successSubmit"><b>Succesful Submissions: </b>&nbsp;<span class="submissionDetails"><%= problem['successfulSubmissions'] %></span></p>
+	      			<br>
+	      			<p class="accuracy"><b>Accuracy: </b>&nbsp;<span class="accuracyDetail"><%= problem['accuracy'] %></span></p>
+	      		</div>
+	      		<hr>
+	      		<div class="link">
+	      			<a href="https://www.codechef.com/problems/<%= problem['problemCode'] %>" target="_blank">
+	      				<button class="btn waves-effect waves-light" type="submit" name="action">View On Codechef
+    						<i class="material-icons right">send</i>
+  						</button>
+  					</a>
+	      		</div>
+	      	</div>
+		</div>
+	</div>
+
+
+	<!-- Modal Structure -->
+	  <div id="modal1" class="modal">
+	    <div class="modal-content">
+	      <h5>Your 5 Recent Submssions</h5>
+	      <hr>
+	      <table class="striped responsive-table">
+	        <thead class="tableHead">
+
+	        </thead>
+
+	        <tbody class="tableBody">
+
+            <div class="preloader-wrapper big active">
+              <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+
+	        </tbody>
+	     </table>
+	    </div>
+	    <div class="modal-footer">
+	      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+	    </div>
+	  </div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script type="text/javascript" src="/scripts/practise.js"></script>
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+    	var elems = document.querySelectorAll('.modal');
+    	var instances = M.Modal.init(elems);
+      var elemSecond = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elemSecond);
+  	});
+</script>
+
+</body>
+</html>
