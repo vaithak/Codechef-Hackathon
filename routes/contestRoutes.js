@@ -91,8 +91,8 @@ router.post('/email', authCheck, function(req, res){
 // Endpoint for saving the user's notes
 router.post('/remind', authCheck, function(req, res){
     var change = !req.user.reminder;
-    console.log(MailList);
-    console.log(User);
+    //console.log(MailList);
+    //console.log(User);
     if(req.user.email)
     {
         if(change)
