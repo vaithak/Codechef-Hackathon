@@ -16,7 +16,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', authCheck, function(req, res){
-    console.log(req.user);
+    // console.log(req.user);
     User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
     if(currentUser)
     {        
@@ -33,22 +33,8 @@ router.get('/', authCheck, function(req, res){
 
         request(options)
         .then(function (result) {
-          console.log(result['result']['data']['content']);
-          // res.render('profile', {
-          //   result: result['result']['data']['content'],
-          //   user: req.user.codechefId,
-          //   gravatar: md5(req.user.codechefId)
-          //  });
-         })
-        .catch(function (err) {
-            throw err;
-            console.log("Request error" + err);
-            res.redirect('/error.html');
-        });
-
-      });
-        refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
-        var options = {
+          // console.log(result['result']['data']['content']['contestList']);
+          var options = {
           method: 'GET',
           uri: 'https://api.codechef.com/contests?status=future',
           headers: {
@@ -56,16 +42,18 @@ router.get('/', authCheck, function(req, res){
               'Authorization': 'Bearer ' + req.user.accessToken
           },
           json: true // Automatically parses the JSON string in the response
-        };
+          };
 
         request(options)
-        .then(function (result) {
-          console.log(result['result']['data']['content']);
-          // res.render('profile', {
-          //   result: result['result']['data']['content'],
-          //   user: req.user.codechefId,
-          //   gravatar: md5(req.user.codechefId)
-          //  });
+        .then(function (result2) {
+          // console.log(result2['result']['data']['content']);
+            res.render('contests', { 
+                user: req.user.codechefId,
+                email: req.user.email,
+                reminder: req.user.reminder,
+                ongoing: result['result']['data']['content']['contestList'],
+                upcoming: result2['result']['data']['content']['contestList']
+             });
          })
         .catch(function (err) {
             throw err;
@@ -73,12 +61,14 @@ router.get('/', authCheck, function(req, res){
             res.redirect('/error.html');
         });
 
+        })
+        .catch(function (err) {
+            throw err;
+            console.log("Request error" + err);
+            res.redirect('/error.html');
+        });
+
       });
-    res.render('contests', { 
-        user: req.user.codechefId,
-        email: req.user.email,
-        reminder: req.user.reminder
-     });
     }
     else
     {
