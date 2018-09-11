@@ -9,7 +9,8 @@ body{
 }
 
 #mainBody{
-  margin-top: 9%;
+  padding-top: 9%;
+  background-color: #feffc9
 }
 
 table{
