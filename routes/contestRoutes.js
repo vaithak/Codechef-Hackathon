@@ -114,12 +114,12 @@ router.post('/remind', authCheck, function(req, res){
             {console.log(err);
             return res.status(500).send({ error: err });}
           else
-            return res.send("succesfully changed");
+            return res.send(change);
         });
     }
     else
     {
-        res.render('email',{ user: req.user.codechefId});
+        res.redirect('/error.html');
     }
 
 

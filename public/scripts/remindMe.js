@@ -8,6 +8,13 @@ $('#bell').on('click',function(){
 		url: "/contests/remind",
 		success: function(msg){
 			console.log(msg);
+			if(msg == true)
+			{
+				$('#bell > i').css('color','blue');
+			}
+			else {
+				$('#bell > i').css('color',"#ddd");
+			}
 		}
 	});
 })
