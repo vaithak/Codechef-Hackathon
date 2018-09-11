@@ -19,14 +19,14 @@ router.get('/', authCheck, function(req, res){
     // console.log(req.user);
     User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
     if(currentUser)
-    {        
+    {
         refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
         var options = {
           method: 'GET',
           uri: 'https://api.codechef.com/contests?status=present',
           headers: {
               'Accept': 'application/json',
-              'Authorization': 'Bearer ' + req.user.accessToken
+              'Authorization': 'Bearer ' + accessToken
           },
           json: true // Automatically parses the JSON string in the response
         };
@@ -35,19 +35,19 @@ router.get('/', authCheck, function(req, res){
         .then(function (result) {
           // console.log(result['result']['data']['content']['contestList']);
           var options = {
-          method: 'GET',
-          uri: 'https://api.codechef.com/contests?status=future',
-          headers: {
-              'Accept': 'application/json',
-              'Authorization': 'Bearer ' + req.user.accessToken
+            method: 'GET',
+            uri: 'https://api.codechef.com/contests?status=future',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + accessToken
           },
-          json: true // Automatically parses the JSON string in the response
+            json: true // Automatically parses the JSON string in the response
           };
 
         request(options)
         .then(function (result2) {
           // console.log(result2['result']['data']['content']);
-            res.render('contests', { 
+            res.render('contests', {
                 user: req.user.codechefId,
                 email: req.user.email,
                 reminder: req.user.reminder,
@@ -120,7 +120,7 @@ router.post('/remind', authCheck, function(req, res){
     {
         res.render('email',{ user: req.user.codechefId});
     }
-    
+
 
 });
 
