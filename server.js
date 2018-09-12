@@ -4,6 +4,7 @@ const passport = require('passport');
 const authRoutes = require('./routes/authRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const practiseRoutes = require('./routes/practiseRoutes');
 const contestRoutes =require('./routes/contestRoutes');
 const passportSetup = require('./config/passportSetup');
 const mongoose = require('mongoose');
@@ -36,6 +37,7 @@ app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
 app.use('/notes', notesRoutes);
 app.use('/contests',contestRoutes);
+app.use('/practise',practiseRoutes);
 
 app.get('/', function(req, res){
   if(req.user)

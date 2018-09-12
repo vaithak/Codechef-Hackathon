@@ -18,7 +18,7 @@ router.get('/callback',
       throw new Error('user null');
       res.redirect('/error.html');
     }
-    res.redirect('/profile/');
+    res.redirect('/practise/');
   }
 );
 
