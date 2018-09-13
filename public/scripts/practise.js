@@ -52,6 +52,7 @@ $(document).ready(function(){
          $('.problemCode').html(result['problemCode']);
          $('.submissionDetails').html(result['successfulSubmissions']);
          $('.accuracyDetail').html(result['accuracy']);
+         $('.link a').attr("href", "https://www.codechef.com/problems/" + result['problemCode']);
        }
     });
   });

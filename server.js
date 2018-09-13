@@ -42,12 +42,16 @@ app.use('/practise',practiseRoutes);
 app.get('/', function(req, res){
   if(req.user)
   {
-      res.redirect('/profile/');
+      res.redirect('/practise/');
   }
   else
   {
       res.sendFile(__dirname + '/public/html/index.html');
   }
+});
+
+app.get('/error.html', function(req, res){
+  res.sendFile(__dirname + '/public/html/error.html');
 });
 
 const port = process.env.port || 80;
