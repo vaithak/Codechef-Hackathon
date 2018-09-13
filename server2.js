@@ -22,32 +22,16 @@ mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
 });
 
 setInterval(function(){
-	User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
-		if(currentUser)
-		{
-			refreshToken.refreshAccessToken(currentUser.refreshToken,keys.codechef.username.toLowerCase() ,"" ,"").then(function(accessToken){
-			});
-		}
-		else
-		{
-			console.log("Found Nothing");
-		}
-	});	
-},1000*60*5*60);
-setInterval(function(){
 	var date= new Date();
 	var day=parseInt(date.getDate());
 	var month=parseInt(date.getMonth())+1;
 	var year=parseInt(date.getFullYear());
-	console.log("in1");
 	User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
 
 	MailList.find(function(err,docs){
 		if(docs.length)
 		{
-			console.log("in2");
 	    refreshToken.refreshAccessToken(currentUser.refreshToken,keys.codechef.username.toLowerCase() ,"" ,"").then(function(accessToken){
-		    console.log("in4");
 		    var options = {
 		      method: 'GET',
 		      uri: 'https://api.codechef.com/contests?status=future',
@@ -59,7 +43,6 @@ setInterval(function(){
 		    };
 	        request(options)
 	        .then(function (result) {
-	        	console.log("in3");
 	        	var message=[];
 	        	var events=result['result']['data']['content']['contestList'];
 	        	for(var i=0;i<events.length;i++)
@@ -70,9 +53,9 @@ setInterval(function(){
 	        		var day2=parseInt(date2.substring(8,10));
 	        		var diff=(year2-year)*365+(month2-month)*30+(day2-day);
 	        		console.log(diff);
-	        		// if(diff<5)
+	        		// if(diff<3)
 	        		{
-	        			message.push({name:events[i].name,start:events[i].startDate,end:events[i].endDate});
+	        			message.push({name:events[i].name,start:events[i].startDate,end:events[i].endDate,link:"www.codechef.com/"+events[i].code});
 	        		}
 	        	}
 	        		for(var i=0;i<docs.length;i++)
@@ -82,7 +65,11 @@ setInterval(function(){
 	        			var text="This is a system generated mail please do not reply.<br>"
 	        			for(var j=0;j<message.length;j++)
 	        			{
-	        				text+=message[j].name+"  starts at   "+message[j].start+"<br>";
+	        				text+="<h3>"+message[j].name+"</h3><br>\
+	        				Starts at &nbsp;&nbsp;"+message[j].start+"<br>\
+	        				Ends at &nbsp;&nbsp;"+message[j].end+"<br>\
+	        				<a href='"+message[j].link+"'>Go to contest</a><br>\
+	        				<br>";
 	        			}
 	        			var mailOptions={
 	        				to : to,
