@@ -81,6 +81,10 @@ router.get('/', authCheck, function(req, res){
                 });
               }
             });
+          })
+          .catch(function (err) {
+              console.log("Request error" + err);
+              res.redirect('/error.html');
           });
         }
 
@@ -145,12 +149,17 @@ router.post('/recommend', authCheck, function(req, res){
               res.send(problem);
             }
           });
+        }).
+        catch(function(err){
+          console.log("Request error" + err);
+          res.redirect('/error.html');
         });
 
       });
     }
     else
     {
+      console.log("Request error" + err);
       res.redirect('/error.html');
     }
   });
