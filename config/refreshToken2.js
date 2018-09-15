@@ -43,7 +43,7 @@ function refreshAccessToken(refreshToken, username)
           });
         })
         .catch(function (err) {
-          console.log(err);
+          // console.log(err);
           resolve(currentUser['accessToken']);
 
         });
@@ -51,7 +51,7 @@ function refreshAccessToken(refreshToken, username)
 
     })
     .catch(function(err){
-      console.log(err);
+      // console.log(err);
       resolve(currentUser['accessToken']);
     });
 
