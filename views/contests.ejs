@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="/styles/contests.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">  
+    <link rel="stylesheet/less" type="text/css" href="/styles/contests2.less"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.7.1/less.min.js" ></script>
 </head>
 
 <body>
@@ -47,97 +52,106 @@
                 Ongoing Contest
                 <hr>
               </h1>
-              <center>
+              </center>
             </div>
 
         <% var length=parseInt(ongoing.length);
-        for(var i=0;i< length/3;i++){
-        var first=80,second=80,third=80;
-        if(i%3==0)
-        first=255;
-        else if(i%3==1)
-        second=255;
-        else
-        third=255;%>
-          <div class="content">
-              <div class="container-fluid">
-                  <div class="row">
-                      <div class="col-lg-3 col-md-3 col-xs-11 col-sm-5">
-                          <div class="card panel" <%= "style=background-color:rgb("+first+","+second+","+third+");" %>>
-                              <div class="card-content">
-                                  <p class="card-title text-center">
-                                      <a href=<%= "http://www.codechef.com/" + ongoing[3*i].code%> >
-                                        <%= ongoing[3*i].name %>
-                                    </a>
-                                  </p>
-                                  <hr>
-                                  <p><b>Ends at:</b> &nbsp;<%=ongoing[3*i].endDate %> +UTC
-                                  </p>
-                              </div>
-                              <div class="card-read-more">
-                                  <a href=<%= "http://www.codechef.com/" + ongoing[3*i].code%> class="btn btn-primary btn-block">
-                                      Go to Contest
-                                  </a>
-                              </div>
-                          </div>
-                      </div>
-                      <% if(3*i+1< length) {%>
-                      <div class="col-lg-3 col-md-3 col-xs-11 col-sm-5 col-lg-offset-1 col-md-offset-1">
-                          <div class="card panel" <%= "style=background-color:rgb("+second+","+third+","+first+");" %>>
-                              <div class="card-content">
-                                  <p class="card-title text-center">
-                                      <a href=<%= "http://www.codechef.com/" + ongoing[3*i+1].code%> >
-                                        <%= ongoing[3*i+1].name %>
-                                    </a>
-                                  </p>
-                                  <hr>
-                                  <p>
-                                      <b>Ends at:</b> &nbsp;<%=ongoing[3*i+1].endDate %> +UTC
-                                  </p>
-                              </div>
-                              <div class="card-read-more">
-                                  <a href=<%= "http://www.codechef.com/" + ongoing[3*i+1].code%>  class="btn btn-primary btn-block">
-                                      Go to Contest
-                                  </a>
-                              </div>
-                          </div>
-                      </div>
-                      <%}%>
-
-                      <% if(3*i+2< length) {%>
-                      <div class="col-lg-3 col-md-3 col-xs-11 col-sm-5 col-lg-offset-1 col-md-offset-1">
-                          <div class="card panel" <%= "style=background-color:rgb("+third+","+first+","+second+");" %>>
-                              <div class="card-content">
-                                  <p class="card-title text-center">
-                                      <a href=<%= "http://www.codechef.com/" + ongoing[3*i+2].code%> >
-                                        <%=ongoing[3*i+2].name %>
-                                    </a>
-                                  </p>
-                                  <hr>
-                                  <p>
-                                      <b>Ends at:</b> &nbsp;<%=ongoing[3*i+2].endDate %> +UTC
-                                  </p>
-                              </div>
-                              <div class="card-read-more">
-                                  <a href=<%= "http://www.codechef.com/" + ongoing[3*i+2].code%>  class="btn btn-primary btn-block">
-                                      Go to Contest
-                                  </a>
-                              </div>
-                          </div>
-                      </div>
-
-                      <%}%>
-                  </div>
-              </div>
-          </div>
+        for(var i=0;i< length/3;i++){%>
+<section class="container">
+    <div class="row active-with-click">
+      <br>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <article class="material-card Red">
+                <h2>
+                    <span><%=ongoing[3*i].name%></span>
+                </h2>
+                <div class="mc-content">
+                    <div class="img-container">
+                        <img class="img-responsive" <%="src=/images/contest"+((3*i)%12+1)+".png"%>>
+                    </div>
+                    <div class="mc-description">
+                      <strong>Started at :: </strong><%=ongoing[3*i].startDate%><br>
+                      <br>
+                      <br>
+                      <strong>Ends at ::</strong><%=ongoing[3*i].endDate%><br>
+                    </div>
+                </div>                
+                <a class="mc-btn-action">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="mc-footer">
+                    
+                    <a href=<%= "http://www.codechef.com/" + ongoing[3*i].code%> >Head to Contest</a>
+                </div>
+            </article>
+        </div>
+        <% if(3*i+1< length) {%>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <article class="material-card Red">
+                <h2>
+                    <span><%=ongoing[3*i+1].name%></span>
+                </h2>
+                <div class="mc-content">
+                    <div class="img-container">
+                        <img class="img-responsive" <%="src=/images/contest"+((3*i+1)%12+1)+".png"%>>
+                    </div>
+                    <div class="mc-description">
+                      <strong>Started at :: </strong><%=ongoing[3*i+1].startDate%><br>
+                      <br>
+                      <br>
+                      <strong>Ends at ::</strong><%=ongoing[3*i+1].endDate%><br>
+                    </div>
+                </div>                
+                <a class="mc-btn-action">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="mc-footer">
+                    
+                    <a href=<%= "http://www.codechef.com/" + ongoing[3*i+1].code%> >Head to Contest</a>
+                </div>
+            </article>
+        </div>
+        <%}%>
+        <% if(3*i+2< length) {%>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <article class="material-card Red">
+                <h2>
+                    <span><%=ongoing[3*i+2].name%></span>
+                </h2>
+                <div class="mc-content">
+                    <div class="img-container">
+                        <img class="img-responsive" <%="src=/images/contest"+((3*i+2)%12+1)+".png"%>>
+                    </div>
+                    <div class="mc-description">
+                      <strong>Started at :: </strong><%=ongoing[3*i+2].startDate%><br>
+                      <br>
+                      <br>
+                      <strong>Ends at ::</strong><%=ongoing[3*i+2].endDate%><br>
+                    </div>
+                </div>                
+                <a class="mc-btn-action">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="mc-footer">
+                    
+                    <a href=<%= "http://www.codechef.com/" + ongoing[3*i+2].code%> >Head to Contest</a>
+                </div>
+            </article>
+        </div>
       <%}%>
-
-    </section>
-
+    </div>
+</section>
+      <%}%>
+    </div>
+</section>
+  <br>
+  <br>
+    <hr style="border: 1px solid black">
+    <br>
     <section class="wrapper">
         <div class="container-fostrap">
         </div>
-        <div align="left">
+        <div>
             <center>
             <h1 class="heading">
               Upcoming Contest
@@ -147,98 +161,123 @@
         </div>
 
         <% var length=parseInt(upcoming.length);
-        for(var i=0;i< length/3;i++){
-        var first=80,second=80,third=80;
-        if(i%3==0)
-        first=255;
-        else if(i%3==1)
-        second=255;
-        else
-        third=255;%>
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row row-eq-height">
-                    <div class="col-lg-3 col-md-3 col-xs-11 col-sm-5">
-                        <div class="card panel" <%= "style=background-color:rgb("+first+","+second+","+third+");" %>>
-                            <div class="card-content">
-                                <p class="card-title text-center">
-                                    <a href=<%= "http://www.codechef.com/" + upcoming[3*i].code%> >
-                                      <%= upcoming[3*i].name %>
-                                  </a>
-                                </p>
-                                <hr>
-                <div class="col-xs-11 col-sm-5">
-                                    <b>Starts at:</b> &nbsp;<%=upcoming[3*i].startDate%> +UTC
-                                  </div>
-                <div class="col-xs-11 col-sm-5 col-lg-offset-1 col-md-offset-1">
-                                    <b>Ends at:</b> &nbsp;<%=upcoming[3*i].endDate %> +UTC
-                                  </div>
-                            </div>
-                            <div class="card-read-more">
-                                <a href=<%= "http://www.codechef.com/" + upcoming[3*i].code%> class="btn btn-primary btn-block">
-                                    Go to Contest
-                                </a>
-                            </div>
-                        </div>
+        for(var i=0;i< length/3;i++){%>
+<section class="container">
+    <div class="row active-with-click">
+      <br>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <article class="material-card Red">
+                <h2>
+                    <span><%=upcoming[3*i].name%></span>
+                </h2>
+                <div class="mc-content">
+                    <div class="img-container">
+                        <img class="img-responsive" <%="src=/images/contest"+((3*i+6)%12+1)+".png"%>>
                     </div>
-                    <% if(3*i+1< length) {%>
-                    <div class="col-lg-3 col-md-3 col-xs-11 col-sm-5 col-lg-offset-1 col-md-offset-1">
-                        <div class="card panel" <%= "style=background-color:rgb("+second+","+third+","+first+");" %>>
-                            <div class="card-content">
-                                <p class="card-title text-center">
-                                    <a href=<%= "http://www.codechef.com/" + upcoming[3*i+1].code%> >
-                                      <%= upcoming[3*i+1].name %>
-                                  </a>
-                                </p>
-                                <hr>
-                <div class="col-xs-11 col-sm-5">
-                                    <b>Starts at:</b> &nbsp;<%=upcoming[3*i+1].startDate%> +UTC
-                                  </div>
-                <div class="col-xs-11 col-sm-5 col-lg-offset-1 col-md-offset-1">
-                                    <b>Ends at:</b> &nbsp;<%=upcoming[3*i+1].endDate %> +UTC
-                                  </div>
-                            </div>
-                            <div class="card-read-more">
-                                <a href=<%= "http://www.codechef.com/" + upcoming[3*i+1].code%>  class="btn btn-primary btn-block">
-                                    Go to Contest
-                                </a>
-                            </div>
-                        </div>
+                    <div class="mc-description">
+                      <strong>Starts at :: </strong><%=upcoming[3*i].startDate%><br>
+                      <br>
+                      <br>
+                      <strong>Ends at ::</strong><%=upcoming[3*i].endDate%><br>
                     </div>
-                    <%}%>
-
-                    <% if(3*i+2< length) {%>
-                    <div class="col-lg-3 col-md-3 col-xs-11 col-sm-5 col-lg-offset-1 col-md-offset-1">
-                        <div class="card panel" <%= "style=background-color:rgb("+third+","+first+","+second+");" %>>
-                            <div class="card-content">
-                                <p class="card-title text-center">
-                                    <a href=<%= "http://www.codechef.com/" + upcoming[3*i+2].code%> >
-                                      <%=upcoming[3*i+2].name %>
-                                  </a>
-                                </p>
-                                <hr>
-                <div class="col-xs-11 col-sm-5">
-                                    <b>Starts at:</b> &nbsp;<%=upcoming[3*i+2].startDate%>+UTC
-                                  </div>
-                <div class="col-xs-11 col-sm-5 col-lg-offset-1 col-md-offset-1">
-                                    <b>Ends at:</b> &nbsp;<%=upcoming[3*i+2].endDate %>&nbsp;+UTC
-                                    </div>
-                                  </div>
-                            <div class="card-read-more">
-                                <a href=<%= "http://www.codechef.com/" + upcoming[3*i+2].code%>  class="btn btn-primary btn-block">
-                                    Go to Contest
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <%}%>
+                </div>                
+                <a class="mc-btn-action">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="mc-footer">
+                    
+                    <a href=<%= "http://www.codechef.com/" + upcoming[3*i].code%> >Head to Contest</a>
                 </div>
-            </div>
+            </article>
         </div>
-    <%}%>
+        <% if(3*i+1< length) {%>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <article class="material-card Red">
+                <h2>
+                    <span><%=upcoming[3*i+1].name%></span>
+                </h2>
+                <div class="mc-content">
+                    <div class="img-container">
+                        <img class="img-responsive" <%="src=/images/contest"+((3*i+7)%12+1)+".png"%>>
+                    </div>
+                    <div class="mc-description">
+                      <strong>Starts at :: </strong><%=upcoming[3*i+1].startDate%><br>
+                      <br>
+                      <br>
+                      <strong>Ends at ::</strong><%=upcoming[3*i+1].endDate%><br>
+                    </div>
+                </div>                
+                <a class="mc-btn-action">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="mc-footer">
+                    
+                    <a href=<%= "http://www.codechef.com/" + upcoming[3*i+1].code%> >Head to Contest</a>
+                </div>
+            </article>
+        </div>
+        <%}%>
+        <% if(3*i+2< length) {%>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <article class="material-card Red">
+                <h2>
+                    <span><%=upcoming[3*i+2].name%></span>
+                </h2>
+                <div class="mc-content">
+                    <div class="img-container">
+                        <img class="img-responsive" <%="src=/images/contest"+((3*i+8)%12+1)+".png"%>>
+                    </div>
+                    <div class="mc-description">
+                      <strong>Starts at :: </strong><%=upcoming[3*i+2].startDate%><br>
+                      <br>
+                      <br>
+                      <strong>Ends at ::</strong><%=upcoming[3*i+2].endDate%><br>
+                    </div>
+                </div>                
+                <a class="mc-btn-action">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="mc-footer">
+                    
+                    <a href=<%= "http://www.codechef.com/" + upcoming[3*i+2].code%> >Head to Contest</a>
+                </div>
+            </article>
+        </div>
+      <%}%>
     </div>
 </section>
+      <%}%>
+    </div>
+</section>
+<script type="text/javascript">$(function() {
+        $('.material-card > .mc-btn-action').click(function () {
+            var card = $(this).parent('.material-card');
+            var icon = $(this).children('i');
+            icon.addClass('fa-spin-fast');
+
+            if (card.hasClass('mc-active')) {
+                card.removeClass('mc-active');
+
+                window.setTimeout(function() {
+                    icon
+                        .removeClass('fa-arrow-left')
+                        .removeClass('fa-spin-fast')
+                        .addClass('fa-bars');
+
+                }, 800);
+            } else {
+                card.addClass('mc-active');
+
+                window.setTimeout(function() {
+                    icon
+                        .removeClass('fa-bars')
+                        .removeClass('fa-spin-fast')
+                        .addClass('fa-arrow-left');
+
+                }, 800);
+            }
+        });
+    });</script>
 </center>
 
 </body>
