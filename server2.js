@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const MailList =require('./models/MailListModel');
 const User=require('./models/userModel');
-const refreshToken = require('./config/refreshToken');
+const refreshToken = require('./config/refreshToken2');
 var nodemailer = require("nodemailer");
 const request = require('request-promise');
 
@@ -31,7 +31,7 @@ setInterval(function(){
 	MailList.find(function(err,docs){
 		if(docs.length)
 		{
-	    refreshToken.refreshAccessToken(currentUser.refreshToken,keys.codechef.username.toLowerCase() ,"" ,"").then(function(accessToken){
+	    refreshToken.refreshAccessToken(currentUser.refreshToken,keys.codechef.username.toLowerCase()).then(function(accessToken){
 		    var options = {
 		      method: 'GET',
 		      uri: 'https://api.codechef.com/contests?status=future',
@@ -53,7 +53,7 @@ setInterval(function(){
 	        		var day2=parseInt(date2.substring(8,10));
 	        		var diff=(year2-year)*365+(month2-month)*30+(day2-day);
 	        		console.log(diff);
-	        		// if(diff<3)
+	        		if(diff<3)
 	        		{
 	        			message.push({name:events[i].name,start:events[i].startDate,end:events[i].endDate,link:"www.codechef.com/"+events[i].code});
 	        		}
