@@ -70,5 +70,4 @@ var strategy = new OAuth2Strategy({
 
   }
 );
-
 passport.use(strategy);
