@@ -10,9 +10,11 @@ const passportSetup = require('./config/passportSetup');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 
-const app = express()
+mongoose.promise = global.promise;
 
-app.use(express.static('public'))
+const app = express();
+
+app.use(express.static('public'));
 
 // set view engine
 app.set('view engine', 'ejs');

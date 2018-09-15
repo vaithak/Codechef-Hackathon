@@ -19,6 +19,20 @@
 			<button class="modal-trigger submissions" data-target="modal1">&nbsp;</button>
 		</div>
 		<br><br>
+		<div class="loading" style="display:none">
+			<div class="preloader-wrapper big active">
+				<div class="spinner-layer spinner-blue-only">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div><div class="gap-patch">
+						<div class="circle"></div>
+					</div><div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="question">
       		<header class="questionName">
 	        	<h3><%= problem['problemName'] %></h3>
@@ -36,12 +50,16 @@
 	      		</div>
 	      		<hr>
 	      		<div class="link">
+							<i class="material-icons navigationIcon left">arrow_drop_down_circle</i>
 	      			<a href="https://www.codechef.com/problems/<%= problem['problemCode'] %>" target="_blank">
 	      				<button class="btn waves-effect waves-light" type="submit" name="action">View On Codechef
     						<i class="material-icons right">send</i>
   						</button>
   					</a>
 	      		</div>
+						<div class="data" style="display:none">
+							<%- problem['data'] %>
+						</div>
 	      	</div>
 		</div>
 	</div>
@@ -81,7 +99,6 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script type="text/javascript" src="/scripts/practise.js"></script>
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function() {
     	var elems = document.querySelectorAll('.modal');
@@ -89,7 +106,10 @@
       var elemSecond = document.querySelectorAll('.sidenav');
       var instances = M.Sidenav.init(elemSecond);
   	});
+
+	var problemData = <%- JSON.stringify(problem['data']) %>
 </script>
+<script type="text/javascript" src="/scripts/practise.js"></script>
 
 </body>
 </html>

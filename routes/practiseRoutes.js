@@ -34,9 +34,18 @@ router.get('/', authCheck, function(req, res){
           .then(function (result) {
             if(!result['result']['data']['content'])
             {
-              res.render('practise',{
-                user: req.user.codechefId,
-                problem: currentUser['lastRecommended']
+              var problem = currentUser['lastRecommended'];
+              requestProblemData(problem['problemCode'], accessToken).then(function(result){
+                  problem['data'] = result;
+                  // console.log\(problem\);
+                  res.render('practise',{
+                    user: req.user.codechefId,
+                    problem: problem
+                  });
+              })
+              .catch(function(err){
+                  console.log(err);
+                  res.redirect('/error.html');
               });
             }
             else
@@ -50,9 +59,17 @@ router.get('/', authCheck, function(req, res){
                   }
                   else
                   {
-                    res.render('practise',{
-                      user: req.user.codechefId,
-                      problem: problem
+                    requestProblemData(problem['problemCode'], accessToken).then(function(result){
+                        problem['data'] = result;
+                        // console.log\(problem\);
+                        res.render('practise',{
+                          user: req.user.codechefId,
+                          problem: problem
+                        });
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                        res.redirect('/error.html');
                     });
                   }
                 });
@@ -75,9 +92,17 @@ router.get('/', authCheck, function(req, res){
               }
               else
               {
-                res.render('practise',{
-                  user: req.user.codechefId,
-                  problem: problem
+                requestProblemData(problem['problemCode'], accessToken).then(function(result){
+                    problem['data'] = result;
+                    // console.log\(problem\);
+                    res.render('practise',{
+                      user: req.user.codechefId,
+                      problem: problem
+                    });
+                })
+                .catch(function(err){
+                    console.log(err);
+                    res.redirect('/error.html');
                 });
               }
             });
@@ -102,7 +127,7 @@ router.post('/submissions', authCheck, function(req, res){
     if(currentUser)
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
-
+        // console.log(accessToken);
         var options = {
           method: 'GET',
           uri: 'https://api.codechef.com/submissions/?limit=5&username=' + req.user.codechefId,
@@ -146,7 +171,14 @@ router.post('/recommend', authCheck, function(req, res){
             }
             else
             {
-              res.send(problem);
+              requestProblemData(problem['problemCode'], accessToken).then(function(result){
+                  problem['data'] = result;
+                  res.send(problem);
+              })
+              .catch(function(err){
+                  console.log(err);
+                  res.redirect('/error.html');
+              });
             }
           });
         }).
@@ -164,5 +196,29 @@ router.post('/recommend', authCheck, function(req, res){
     }
   });
 });
+
+function requestProblemData(problemCode, accessToken)
+{
+  return new Promise(function(resolve, reject){
+    var options = {
+      method: 'GET',
+      uri: 'https://api.codechef.com/contests/PRACTICE/problems/' + problemCode,
+      headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + accessToken
+      },
+      json: true
+    };
+
+    request(options)
+    .then(function (result) {
+      resolve(result['result']['data']['content']['body']);
+     })
+    .catch(function (err) {
+        console.log("Request error" + err);
+        reject(err);
+    });
+  });
+}
 
 module.exports = router;

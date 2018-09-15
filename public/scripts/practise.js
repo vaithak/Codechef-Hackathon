@@ -40,8 +40,23 @@ $(document).ready(function(){
     });
   });
 
+  $('.navigationIcon').on('click',function(){
+    if($('.data').css('display') == "none")
+    {
+      $('.data').css('display','block');
+      $('.navigationIcon').html("arrow_drop_up");
+    }
+    else
+    {
+      $('.data').css('display','none');
+      $('.navigationIcon').html("arrow_drop_down_circle");
+    }
+  });
+
 
   $('.recommend').on('click', function(){
+    $('.question').css("display","none");
+    $('.loading').css("display","block");
     $.ajax({
        type: "POST",
        url: "/practise/recommend",
@@ -53,6 +68,10 @@ $(document).ready(function(){
          $('.submissionDetails').html(result['successfulSubmissions']);
          $('.accuracyDetail').html(result['accuracy']);
          $('.link a').attr("href", "https://www.codechef.com/problems/" + result['problemCode']);
+         $('.data').html(result['data']);
+         $('.question').css("display","block");
+         $('.loading').css("display","none");
+         // problemData = result['data'];
        }
     });
   });
