@@ -7,13 +7,15 @@ const userSchema = new Schema({
     thumbnail:    	       String,
     accessTokenTimeStamp:  Number,
     accessToken: 	         String,
+    band:                  String,
     institute:             {type : String, "default" : ""},
-    rating: 			   {type : Object, "default" : {}},
-    ranking: 			   {type : Object, "default" : {}},
+    rating: 			         {type : Object, "default" : {}},
+    ranking: 			         {type : Object, "default" : {}},
     notes:        	       {type : Array , "default" : []},
     email:        	       {type : String, "default" : ""},
     lastRecommended:       {type : Object, "default": {}},
-    reminder:     	       {type : Boolean, "default" :false}
+    reminder:     	       {type : Boolean,"default" :false},
+    friends:               {type : Array,  "default": []}
 });
 
 const User = mongoose.model('user', userSchema);

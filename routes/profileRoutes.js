@@ -42,7 +42,7 @@ router.get('/', authCheck, function(req, res){
           request(optionSubmissions)
             .then(function(resultSubmission) {
               // console.log(resultSubmission);
-
+              // console.log(result['result']['data']['content']);
               res.render('profile', {
                 result: result['result']['data']['content'],
                 resultSubmission: resultSubmission['result']['data']['content'],

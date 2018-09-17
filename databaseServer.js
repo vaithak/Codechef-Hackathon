@@ -45,13 +45,14 @@ setInterval(function(){
 	    };
 	    request(options)
 	    .then(function(result){
-	    	var rankings=result['result']['data']['content']['rankings'];
-	    	var ratings=result['result']['data']['content']['ratings'];
-	    	var institute=result['result']['data']['content']['organization'];
-	    	User.findOneAndUpdate({'codechefId':username},{$set:{rating:ratings,ranking:rankings,institute:institute}}, function(err, doc){
+	    	var rankings  =  result['result']['data']['content']['rankings'];
+	    	var ratings   =  result['result']['data']['content']['ratings'];
+	    	var institute =  result['result']['data']['content']['organization'];
+        var band      = result['result']['data']['content']['band'];
+	    	User.findOneAndUpdate({'codechefId':username},{$set:{rating:ratings,ranking:rankings,institute:institute,band:band}}, function(err, doc){
 	    		console.log("Updated "+username);
 	    	});;
-	    });	    	
+	    });
 	   });
 		if(i==userlist.length)
 		{

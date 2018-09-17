@@ -51,11 +51,13 @@ var strategy = new OAuth2Strategy({
             }
             else
             {
+              var friends = [username];
                 new User({
                     codechefId: username,
                     refreshToken: refreshToken,
                     accessToken: accessToken,
-                    accessTokenTimeStamp: +(new Date().getTime())
+                    accessTokenTimeStamp: +(new Date().getTime()),
+                    friends: friends
                 }).save().then(function(newUser) {
                     done(null, newUser);
                 });
