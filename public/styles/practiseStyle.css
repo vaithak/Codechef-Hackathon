@@ -28,7 +28,7 @@ body{
   position: absolute;
   display:block;
   height: 100%;
-  width: 45%;
+  width: 35%;
   margin: 10px 7px;
   padding: 1px 1px;
   font-weight: 700;
@@ -74,19 +74,25 @@ body{
 	}
 }
 
-.recommend{
+/*.recommend{
 	position: absolute;
 	left:0%;
 }
 
 .recommend:after{
-  content:"Recommend another problem";
   position:absolute;
   width:100%;
   height:100%;
   left:0;
   text-align:center;
   -webkit-transition: all 400ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+*/
+.Easier:after{
+  content:"Recommend easier problem";
+}
+.Harder:after{
+  content:"Recommend harder problem";
 }
 
 .recommend:before {

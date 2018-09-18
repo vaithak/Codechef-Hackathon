@@ -6,6 +6,7 @@ const User=require('./models/userModel');
 const refreshToken = require('./config/refreshToken2');
 var nodemailer = require("nodemailer");
 const request = require('request-promise');
+const questions = require('./models/QuestionsModel');
 
 const app = express()
 
@@ -92,6 +93,62 @@ setInterval(function(){
 	});	
 
 },1000*60*60*24);
+
+function createOptions(type,accessToken)
+{
+	var options	={
+		      method: 'GET',
+		      uri: 'https://api.codechef.com/problems/'+type+'?limit=100&sortOrder=desc',
+		      headers: {
+		         'Accept': 'application/json',
+		         'Authorization': 'Bearer ' + accessToken
+		      },
+		      json: true // Automatically parses the JSON string in the response
+		    };
+	return options;
+}
+setInterval(function(){
+	var school,easy,medium,hard,challenge,extcontest;
+	User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
+		refreshToken.refreshAccessToken(currentUser.refreshToken,keys.codechef.username.toLowerCase()).then(function(accessToken){
+			var options =createOptions("school",accessToken);
+		    request(options)
+	        .then(function (result) {
+	        	school=result['result']['data']['content'];
+				var options2 =createOptions("easy",accessToken);
+			    request(options2)
+		        .then(function (result2) {
+		        	easy=result2['result']['data']['content'];
+					var options3 =createOptions("medium",accessToken);
+				    request(options3)
+			        .then(function (result3) {
+			        	medium=result3['result']['data']['content'];
+			        		var options4 =createOptions("hard",accessToken);
+						    request(options4)
+					        .then(function (result4) {
+					        	hard=result4['result']['data']['content'];
+								var options5 =createOptions("challenge",accessToken);
+							    request(options5)
+						        .then(function (result5) {
+						        	challenge=result5['result']['data']['content'];
+									var options6 =createOptions("extcontest",accessToken);
+								    request(options6)
+							        .then(function (result6) {
+							        	extcontest=result6['result']['data']['content'];
+							        	questions.remove({},function(){
+							        		var Questionvar=new questions({school:school,easy:easy,medium:medium,hard:hard,challenge:challenge,extcontest:extcontest});
+							        		Questionvar.save();
+							        	});
+							        });
+						        });
+	       					});
+			        });
+	        	});
+	        });
+		});
+	});
+},1000*60*60*48);
+
 const port = process.env.port || 8080;
 
 app.listen(port, function(){
