@@ -54,25 +54,34 @@ $(document).ready(function(){
   });
 
 
-  $('.recommend').on('click', function(){
+  $('.Easier').on('click', function(){
+    recommend("recommend");
+  });
+  $('.Harder').on('click', function(){
+    recommend("recommend");
+  });
+  
+  function recommend(type){
     $('.question').css("display","none");
     $('.loading').css("display","block");
     $.ajax({
-       type: "POST",
-       url: "/practise/recommend",
-       success: function(result){
-         console.log(result);
-         $('.questionName > h3').html(result['problemName']);
-         $('.category').html(result['category']);
-         $('.problemCode').html(result['problemCode']);
-         $('.submissionDetails').html(result['successfulSubmissions']);
-         $('.accuracyDetail').html(result['accuracy']);
-         $('.link a').attr("href", "https://www.codechef.com/problems/" + result['problemCode']);
-         $('.data').html(result['data']);
-         $('.question').css("display","block");
-         $('.loading').css("display","none");
-         // problemData = result['data'];
-       }
+      type: "POST",
+      url: "/practise/"+type,
+      success: function(result){
+      console.log(result);
+      $('.questionName > h3').html(result['problemName']);
+      $('.category').html(result['category']);
+      $('.problemCode').html(result['problemCode']);
+      $('.submissionDetails').html(result['successfulSubmissions']);
+      $('.accuracyDetail').html(result['accuracy']);
+      $('.link a').attr("href", "https://www.codechef.com/problems/" + result['problemCode']);
+      $('.data').html(result['data']);
+      $('.question').css("display","block");
+      $('.loading').css("display","none");
+      // problemData = result['data'];
+      }
     });
-  });
+
+  }
 });
+
