@@ -1,5 +1,6 @@
 const request = require('request-promise');
 const questions=require('./../models/QuestionsModel');
+const User=require('./../models/userModel');
 function random(min,max){
   return min + Math.floor(Math.random() * (max-min));
 }
@@ -48,22 +49,30 @@ function recommendProblem(username,accessToken){
   });
 }
 
-function recommend(user,isHard)
+function getLevel(user,isHard)
 {
-  //update questionLevel
-  //base case
-  var level,type,level2;
+  var level;
   if(isHard)
   {
-    level=user['questionLevel']+12;
+    level=user['questionLevel']+14;
   }
   else
   {
     level=user['questionLevel']-30;
   }
   if(level<0)
-    level=200
-  level2=level;
+  {
+    level=0;
+  }
+  else if(level>=3600)
+  {
+    level=3599;
+  }
+  return level;
+}
+
+function getType(level){
+  var type;
   level/=600;
   level=parseInt(level);
   switch(level)
@@ -83,14 +92,29 @@ function recommend(user,isHard)
     default:type="school";
     break;
   }
+  return type;
+}
+
+function recommend(user,isHard)
+{
+  //base case
+  //setupquestionlevel in begining;
+  var level,type;
+  level=getLevel(user,isHard);
+  User.findOneAndUpdate({codechefId:user['codechefId']},{$set:{'questionLevel':level}},function(err){
+    console.log("Success");
+  });
+  level=(level+user['rating']['allContest'])/2;
+  type=getType(level,user);
+
   return new Promise(function(resolve,reject){
-    level2=level2/6;
-    level2=parseInt(level2);
-    level2%=100;
+    level=level/6;
+    level=parseInt(level);
+    level%=100;
     questions.find({},function(err,docs){
       if(docs.length)
       {
-        var problem=docs[0][type][level2];
+        var problem=docs[0][type][level];
         problem['category']=type;
         resolve(problem);
       }

@@ -174,6 +174,8 @@ function recommendType(req,res,isHard){
     User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
     if(currentUser)
     {
+      // console.log(currentUser['questionLevel']);
+      //check for submit
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
 
         // recommend(req.user.codechefId, accessToken).then(function(problem){
