@@ -3,6 +3,7 @@ const router = require('express').Router();
 const refreshToken = require('../config/refreshToken');
 const User = require('../models/userModel');
 const recommend = require('../helpers/recommend').recommendProblem;
+const recommend2 = require('../helpers/recommend').recommend;
 const md5 = require('md5');
 
 const authCheck = function(req,res, next){
@@ -19,7 +20,7 @@ router.get('/', authCheck, function(req, res){
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
         if(Object.keys(currentUser['lastRecommended']).length != 0)
-        {
+        {//may remove
           var options = {
             method: 'GET',
             uri: 'https://api.codechef.com/submissions/?result=AC&username=' + req.user.codechefId + '&problemCode=' + currentUser['lastRecommended'],
@@ -50,6 +51,7 @@ router.get('/', authCheck, function(req, res){
             }
             else
             {
+              //re recommend
               recommend(req.user.codechefId, accessToken).then(function(problem){
                 User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem}}, function(err,doc) {
                   if (err)
@@ -82,7 +84,7 @@ router.get('/', authCheck, function(req, res){
           });
         }
         else
-        {
+        { //first recommend
           recommend(req.user.codechefId, accessToken).then(function(problem){
             User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem}}, function(err,doc) {
               if (err)
@@ -156,13 +158,26 @@ router.post('/submissions', authCheck, function(req, res){
   });
 });
 
-router.post('/recommend', authCheck, function(req, res){
-  User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
+router.post('/hard', authCheck, function(req, res){
+  // var difficulty=req.body.difficulty;
+  var type=true;
+  recommendType(req,res,type)
+});
+
+router.post('/easy',authCheck,function(req,res){
+  var type=false;
+  recommendType(req,res,type);
+})
+
+function recommendType(req,res,isHard){
+  // console.log(isHard);
+    User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
     if(currentUser)
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
 
-        recommend(req.user.codechefId, accessToken).then(function(problem){
+        // recommend(req.user.codechefId, accessToken).then(function(problem){
+          recommend2(currentUser,isHard).then(function(problem){
           User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem}}, function(err,doc) {
             if (err)
             {
@@ -195,8 +210,7 @@ router.post('/recommend', authCheck, function(req, res){
       res.redirect('/error.html');
     }
   });
-});
-
+}
 function requestProblemData(problemCode, accessToken)
 {
   return new Promise(function(resolve, reject){

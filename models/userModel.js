@@ -15,7 +15,9 @@ const userSchema = new Schema({
     email:        	       {type : String, "default" : ""},
     lastRecommended:       {type : Object, "default": {}},
     reminder:     	       {type : Boolean,"default" :false},
-    friends:               {type : Array,  "default": []}
+    friends:               {type : Array,  "default": []},
+    questionLevel: 			{type: Number, "default": 0},
+    practiseLevel: 			{type: Number, "default":0}  
 });
 
 const User = mongoose.model('user', userSchema);

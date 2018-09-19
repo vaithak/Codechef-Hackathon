@@ -1,5 +1,5 @@
 const request = require('request-promise');
-
+const questions=require('./../models/QuestionsModel');
 function random(min,max){
   return min + Math.floor(Math.random() * (max-min));
 }
@@ -48,4 +48,59 @@ function recommendProblem(username,accessToken){
   });
 }
 
+function recommend(user,isHard)
+{
+  //update questionLevel
+  //base case
+  var level,type,level2;
+  if(isHard)
+  {
+    level=user['questionLevel']+12;
+  }
+  else
+  {
+    level=user['questionLevel']-30;
+  }
+  if(level<0)
+    level=200
+  level2=level;
+  level/=600;
+  level=parseInt(level);
+  switch(level)
+  {
+    case 0:type="school";
+    break;
+    case 1:type="easy";
+    break;
+    case 2:type="medium";
+    break;
+    case 3:type="hard";
+    break;
+    case 4:type="challenge";
+    break;
+    case 5:type="extcontest";
+    break;
+    default:type="school";
+    break;
+  }
+  return new Promise(function(resolve,reject){
+    level2=level2/6;
+    level2=parseInt(level2);
+    level2%=100;
+    questions.find({},function(err,docs){
+      if(docs.length)
+      {
+        var problem=docs[0][type][level2];
+        problem['category']=type;
+        resolve(problem);
+      }
+      else
+      {
+        reject("Failed");
+      }
+    });
+  });
+}
+
 module.exports.recommendProblem = recommendProblem;
+module.exports.recommend=recommend;

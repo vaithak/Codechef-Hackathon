@@ -55,10 +55,10 @@ $(document).ready(function(){
 
 
   $('.Easier').on('click', function(){
-    recommend("recommend");
+    recommend("easy");
   });
   $('.Harder').on('click', function(){
-    recommend("recommend");
+    recommend("hard");
   });
   
   function recommend(type){
@@ -67,6 +67,9 @@ $(document).ready(function(){
     $.ajax({
       type: "POST",
       url: "/practise/"+type,
+      // data: {
+      //   difficulty:type
+      // },
       success: function(result){
       console.log(result);
       $('.questionName > h3').html(result['problemName']);
