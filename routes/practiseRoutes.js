@@ -170,39 +170,66 @@ router.post('/easy',authCheck,function(req,res){
 })
 
 function recommendType(req,res,isHard){
-  // console.log(isHard);
     User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
     if(currentUser)
     {
-      // console.log(currentUser['questionLevel']);
-      //check for submit
+      // console.log(currentUser);
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
+        var options = {
+          method: 'GET',
+          uri: 'https://api.codechef.com/submissions/?result=AC&username=' + req.user.codechefId+'&problemCode='+currentUser['lastRecommended']['problemCode'],
+          headers: {
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ' + accessToken
+          },
+          json: true
+        };
 
-        // recommend(req.user.codechefId, accessToken).then(function(problem){
-          recommend2(currentUser,isHard).then(function(problem){
-          User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem}}, function(err,doc) {
-            if (err)
-            {
-              console.log(err);
-              return res.status(500).send({ error: err });
-            }
-            else
-            {
-              requestProblemData(problem['problemCode'], accessToken).then(function(result){
-                  problem['data'] = result;
-                  res.send(problem);
-              })
-              .catch(function(err){
-                  console.log(err);
-                  res.redirect('/error.html');
-              });
-            }
+        request(options)
+        .then(function (result) {
+          // console.log(result);
+          var practiseLevel;
+          if(result['result']['data']['content'])
+          {
+            practiseLevel=parseInt((currentUser['practiseLevel']+currentUser['questionLevel'])/2);
+            // console.log("in");
+          }
+          else
+          {
+            practiseLevel=currentUser['practiseLevel'];
+            // console.log("out");
+          }
+            recommend2(currentUser,isHard).then(function(problem){
+            User.findOneAndUpdate({'codechefId': req.user.codechefId}, {$set: {'lastRecommended': problem,'practiseLevel':practiseLevel}}, function(err,doc) {
+              if (err)
+              {
+                console.log(err);
+                return res.status(500).send({ error: err });
+              }
+              else
+              {
+                requestProblemData(problem['problemCode'], accessToken).then(function(result){
+                    problem['data'] = result;
+                    res.send(problem);
+                })
+                .catch(function(err){
+                    console.log(err);
+                    res.redirect('/error.html');
+                });
+              }
+            });
+          }).
+          catch(function(err){
+            console.log("Request error" + err);
+            res.redirect('/error.html');
           });
-        }).
-        catch(function(err){
-          console.log("Request error" + err);
-          res.redirect('/error.html');
+         })
+        .catch(function (err) {
+            console.log("Request error" + err);
+            res.redirect('/error.html');
         });
+        // recommend(req.user.codechefId, accessToken).then(function(problem){
+
 
       });
     }

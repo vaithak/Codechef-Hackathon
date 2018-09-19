@@ -102,7 +102,7 @@ function recommend(user,isHard)
   var level,type;
   level=getLevel(user,isHard);
   User.findOneAndUpdate({codechefId:user['codechefId']},{$set:{'questionLevel':level}},function(err){
-    console.log("Success");
+    // console.log("Success");
   });
   level=(level+user['rating']['allContest'])/2;
   type=getType(level,user);
