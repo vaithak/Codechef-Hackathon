@@ -4,7 +4,7 @@ const keys = require('./config/keys');
 const MailList =require('./models/MailListModel');
 const User=require('./models/userModel');
 const refreshToken = require('./config/refreshToken2');
-var nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 const request = require('request-promise');
 const questions = require('./models/QuestionsModel');
 
@@ -18,10 +18,12 @@ var smtpTransport = nodemailer.createTransport({
         pass: keys.gmail.password
     }
 });
+
 mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
     console.log('connected to mongodb');
 });
 
+// Sending Mail to Users
 setInterval(function(){
 	var date= new Date();
 	var day=parseInt(date.getDate());
@@ -94,6 +96,8 @@ setInterval(function(){
 
 },1000*60*60*24);
 
+
+// Updating Question Database
 function createOptions(type,accessToken)
 {
 	var options	={
@@ -107,6 +111,7 @@ function createOptions(type,accessToken)
 		    };
 	return options;
 }
+
 setInterval(function(){
 	var school,easy,medium,hard,challenge,extcontest;
 	User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
