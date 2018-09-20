@@ -58,6 +58,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/error.html', function(req, res){
+  res.status(400);
   res.sendFile(__dirname + '/public/html/error.html');
 });
 

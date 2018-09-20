@@ -125,3 +125,10 @@ body {
   width: 100%;
   margin-left: 0;
 }
+
+.displaySearchResult{
+  border: 1px solid black;
+  background-color: #eee;
+  width:100% !important;
+  padding: 5px;
+}
