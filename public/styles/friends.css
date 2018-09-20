@@ -6,7 +6,7 @@ body {
 	position:absolute;
 	top:15%;
   left:10%;
-  height: 65%;
+  min-height: 65%;
   width:80%;
   background-color:white;
   box-shadow: 5px 5px 10px 5px #888888;

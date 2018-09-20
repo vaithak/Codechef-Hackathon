@@ -52,6 +52,7 @@ $('.removeFriend').on('click',function(){
 
 $('.searchFriend').submit(function(e){
   var userToAdd = $('input[name=friend]').val();
+  $('input[name=friend]').val("");
   $('.returnFriendStatus').css("display","none");
   var status = confirmed;
 
@@ -70,7 +71,7 @@ $('.searchFriend').submit(function(e){
           $('.returnFriendStatus').html(result['message']);
 
           if(result['message']=="Added")
-            location.reload();
+            window.location.reload();
        }
        else
        {
