@@ -82,7 +82,7 @@ section article.skills div:nth-child(1) span:nth-child(2) {
   width: 80%;
   animation-delay: 0;
 }
-/*section:before {
+/* section:before {
   position: absolute;
   top: -250px;
   left: -350px;
@@ -101,7 +101,7 @@ section article.skills div:nth-child(1) span:nth-child(2) {
   content: '';
   background: rgba(108, 90, 232, 0.25);
   transform: rotate(30deg);
-}*/
+} */
 .skills {
   animation: skills 1.25s cubic-bezier(0.17, 0.67, 0, 1);
 }

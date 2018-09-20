@@ -57,7 +57,11 @@ var strategy = new OAuth2Strategy({
                     refreshToken: refreshToken,
                     accessToken: accessToken,
                     accessTokenTimeStamp: +(new Date().getTime()),
-                    friends: friends
+                    friends: friends,
+                    ranking  =  result['result']['data']['content']['rankings'];
+            	    	rating   =  result['result']['data']['content']['ratings'];
+            	    	institute =  result['result']['data']['content']['organization'];
+                    band      = result['result']['data']['content']['band'];
                 }).save().then(function(newUser) {
                     done(null, newUser);
                 });
