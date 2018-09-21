@@ -17,7 +17,12 @@ User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(c
   start(myUser['refreshToken']);
 });
 
-function start(myUserRefreshToken){
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Update user's model with data shown on friends page
+async function start(myUserRefreshToken){
   setInterval(function(){
     var userlist=[];
     User.find(function(err,docs){
@@ -47,18 +52,18 @@ function start(myUserRefreshToken){
             var rankings  =  result['result']['data']['content']['rankings'];
             var ratings   =  result['result']['data']['content']['ratings'];
             var institute =  result['result']['data']['content']['organization'];
-            var band      = result['result']['data']['content']['band'];
+            var band      =  result['result']['data']['content']['band'];
             User.findOneAndUpdate({'codechefId':username},{$set:{rating:ratings,ranking:rankings,institute:institute,band:band}}, function(err, doc){
               console.log("Updated "+username);
             });;
           });
          });
+
+         await sleep(1000*60*5);
       }
     });
   },1000*60*60*10);
 }
-
-
 
 const port = process.env.port || 8090;
 
