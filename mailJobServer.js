@@ -6,7 +6,7 @@ const User=require('./models/userModel');
 const refreshToken = require('./config/refreshToken2');
 const nodemailer = require("nodemailer");
 const request = require('request-promise');
-const Questions = require('./models/QuestionsModel');
+const CronJob = require('cron').CronJob;
 
 const app = express()
 
@@ -21,11 +21,12 @@ var smtpTransport = nodemailer.createTransport({
 
 mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
     console.log('connected to mongodb');
+    job.start();
 });
 
 // Sending Mail to Users
-setInterval(function(){
-	var date= new Date();
+const job = new CronJob('30 0 0 * * *', function(myUserRefreshToken) {
+  var date= new Date();
 	var day=parseInt(date.getDate());
 	var month=parseInt(date.getMonth())+1;
 	var year=parseInt(date.getFullYear());
@@ -34,7 +35,7 @@ setInterval(function(){
 	MailList.find(function(err,docs){
 		if(docs.length)
 		{
-	    refreshToken.refreshAccessToken(currentUser.refreshToken,keys.codechef.username.toLowerCase()).then(function(accessToken){
+	    refreshToken.refreshAccessToken(currentUser['refreshToken'],keys.codechef.username.toLowerCase()).then(function(accessToken){
 
 	    var options = {
 	      method: 'GET',
@@ -100,74 +101,4 @@ setInterval(function(){
 		}
 	});
 });
-
-},1000*60*60*24);
-
-
-// Updating Question Database
-function createOptions(type,accessToken)
-{
-	var options	={
-		      method: 'GET',
-		      uri: 'https://api.codechef.com/problems/'+type+'?limit=100&sortOrder=desc',
-		      headers: {
-		         'Accept': 'application/json',
-		         'Authorization': 'Bearer ' + accessToken
-		      },
-		      json: true // Automatically parses the JSON string in the response
-		    };
-	return options;
-}
-
-// Updates Database with Questions
-setInterval(function(){
-	var school,easy,medium,hard,challenge;
-	User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
-		refreshToken.refreshAccessToken(currentUser.refreshToken,keys.codechef.username.toLowerCase()).then(function(accessToken){
-			var options =createOptions("school",accessToken);
-		    request(options)
-	      .then(function (result) {
-	       school=result['result']['data']['content'];
-
-			    var options2 = createOptions("easy",accessToken);
-		      request(options2)
-	        .then(function (result2) {
-	        easy=result2['result']['data']['content'];
-
-				  var options3 = createOptions("medium",accessToken);
-			    request(options3)
-	        .then(function (result3) {
-        	medium=result3['result']['data']['content'];
-
-          var options4 = createOptions("hard",accessToken);
-			    request(options4)
-	        .then(function (result4) {
-        	hard=result4['result']['data']['content'];
-
-          var options5 = createOptions("challenge",accessToken);
-			    request(options5)
-	        .then(function (result5) {
-        	challenge=result5['result']['data']['content'];
-
-	        Questions.remove({},function(){
-  	        var QuestionVar=new Questions({school:school,easy:easy,medium:medium,hard:hard,challenge:challenge});
-  					QuestionVar.save();
-					});
-				});
-	     });
- 			});
-	   });
-    });
-	 });
- })
- .catch(function(err){
-   console.log(err);
- });
-
-},1000*60*60*48);
-
-const port = process.env.port || 8080;
-
-app.listen(port, function(){
-  console.log("App listening on port " + port);
-})
+});
