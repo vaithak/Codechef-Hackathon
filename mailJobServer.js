@@ -1,4 +1,3 @@
-const express = require('express');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const MailList =require('./models/MailListModel');
@@ -7,8 +6,6 @@ const refreshToken = require('./config/refreshToken2');
 const nodemailer = require("nodemailer");
 const request = require('request-promise');
 const CronJob = require('cron').CronJob;
-
-const app = express()
 
 var smtpTransport = nodemailer.createTransport({
     service: "gmail",
@@ -25,7 +22,7 @@ mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
 });
 
 // Sending Mail to Users
-const job = new CronJob('30 0 0 * * *', function() {
+const job = new CronJob('0 0 5 * * *', function() {
   var date= new Date();
 	var day=parseInt(date.getDate());
 	var month=parseInt(date.getMonth())+1;

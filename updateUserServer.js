@@ -1,18 +1,16 @@
-const express = require('express');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const User=require('./models/userModel');
 const refreshToken = require('./config/refreshToken2');
 const request = require('request-promise');
 const CronJob = require('cron').CronJob;
-const app = express()
 
 mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
     console.log('connected to mongodb');
     job.start();
 });
 
-const job = new CronJob('0 10 */10 * * *', function() {
+const job = new CronJob('30 10 */10 * * *', function() {
   var userlist=[];
   User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
     var myUserRefreshToken = currentUser['refreshToken'];
