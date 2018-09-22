@@ -9,11 +9,7 @@ const CronJob = require('cron').CronJob;
 
 mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
     console.log('connected to mongodb');
-});
-
-User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
-  var refreshToken = currentUser['refreshToken'];
-  job.start(refreshToken);
+    job.start();
 });
 
 // Updating Question Database
@@ -32,7 +28,7 @@ function createOptions(type,accessToken)
 }
 
 
-const job = new CronJob('0 1 0 */2 * *', function(myUserRefreshToken) {
+const job = new CronJob('0 1 0 */2 * *', function() {
   var school,easy,medium,hard,challenge;
 	User.findOne({codechefId :keys.codechef.username.toLowerCase()}).then(function(currentUser){
 		refreshToken.refreshAccessToken(currentUser['refreshToken'],keys.codechef.username.toLowerCase()).then(function(accessToken){
