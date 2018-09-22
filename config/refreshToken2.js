@@ -1,3 +1,4 @@
+
 const keys = require('./keys');
 const request = require('request-promise');
 const User = require('../models/userModel');
@@ -13,15 +14,14 @@ function refreshAccessToken(refreshToken, username)
       // Refreshing only if time exceeds 45 minutes
       if(diff < 1000*60*45)
       {
-        // console.log("reduced");
         resolve(currentUser['accessToken']);
       }
       else
       {
         var data = {
           'grant_type'    : 'refresh_token',
-          'client_id'     :  keys.codechef.databaseID,
-          'client_secret' :  keys.codechef.databaseSecret,
+          'client_id'     :  keys.codechef.clientID,
+          'client_secret' :  keys.codechef.clientSecret,
           'refresh_token' :  refreshToken,
         };
 
@@ -38,21 +38,19 @@ function refreshAccessToken(refreshToken, username)
         request(options)
         .then(function (result) {
           var newRefreshToken = result['result']['data']['refresh_token'];
-          User.findOneAndUpdate({codechefId: username},{refreshToken: newRefreshToken, accessToken: result['result']['data']['access_token'], accessTokenTimeStamp:currTime}).then(function(){
+          User.update({codechefId: username},{$set: {refreshToken: newRefreshToken, accessToken: result['result']['data']['access_token'], accessTokenTimeStamp: currTime}}).then(function(){
               resolve(result['result']['data']['access_token']);
           });
         })
         .catch(function (err) {
-          // console.log(err);
-          resolve(currentUser['accessToken']);
+          reject(err);
 
         });
       }
 
     })
     .catch(function(err){
-      // console.log(err);
-      resolve(currentUser['accessToken']);
+      reject(err);
     });
 
     });
