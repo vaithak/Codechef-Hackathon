@@ -25,7 +25,7 @@ mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function() {
 });
 
 // Sending Mail to Users
-const job = new CronJob('30 0 0 * * *', function(myUserRefreshToken) {
+const job = new CronJob('30 0 0 * * *', function() {
   var date= new Date();
 	var day=parseInt(date.getDate());
 	var month=parseInt(date.getMonth())+1;
