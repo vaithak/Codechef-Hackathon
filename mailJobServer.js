@@ -61,7 +61,11 @@ const job = new CronJob('0 0 5 * * *', function() {
       			message.push({name:events[i].name,start:events[i].startDate,end:events[i].endDate,link:"www.codechef.com/"+events[i].code});
       		}
       	}
-    		for(var i=0;i<docs.length;i++)
+
+        var i=0;
+        recursive();
+
+    		function recursive()
     		{
     			var to=docs[i].Id;
     			var subject="Contest Reminder";
@@ -85,11 +89,16 @@ const job = new CronJob('0 0 5 * * *', function() {
           		console.log(error);
      				}
             else{
-            	console.log("Message sent: " + response.message);
+            	console.log("Message sent to " + docs[i].Id);
+              i++;
+              recursive();
          		}
 				  });
       	}
 
+       })
+       .catch(function(err){
+         console.log(err);
        });
       })
       .catch(function(err){
