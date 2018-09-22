@@ -38,7 +38,7 @@ function refreshAccessToken(refreshToken, username)
         request(options)
         .then(function (result) {
           var refreshToken = result['result']['data']['refresh_token'];
-          User.findOneAndUpdate({codechefId: username},{refreshToken: refreshToken, accessToken: result['result']['data']['access_token']}).then(function(){
+          User.findOneAndUpdate({codechefId: username},{refreshToken: refreshToken, accessToken: result['result']['data']['access_token'], accessTokenTimeStamp:currTime}).then(function(){
               resolve(result['result']['data']['access_token']);
           });
         })
