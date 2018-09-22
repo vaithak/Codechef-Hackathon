@@ -16,8 +16,8 @@ const userSchema = new Schema({
     lastRecommended:       {type : Object, "default": {}},
     reminder:     	       {type : Boolean,"default" :false},
     friends:               {type : Array,  "default": []},
-    questionLevel: 			   {type: Number, "default": 0},
-    practiseLevel: 			   {type: Number, "default":0}  
+    questionLevel: 			   {type:  Number, "default": 0},
+    practiseLevel: 			   {type:  Number, "default":0}  
 });
 
 const User = mongoose.model('user', userSchema);

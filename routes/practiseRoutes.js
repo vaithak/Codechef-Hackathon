@@ -96,7 +96,7 @@ router.post('/easy',authCheck,function(req,res){
     if(currentUser)
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
-        recommend.recommendDifferentProblem(currentUser, accessToken, "harder").then(function(problem){
+        recommend.recommendDifferentProblem(currentUser, accessToken, "easier").then(function(problem){
           requestProblemData(problem['problemCode'], accessToken).then(function problemData(){
             problem['data'] = problemData;
             res.send(problem);
