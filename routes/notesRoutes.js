@@ -71,7 +71,7 @@ router.post('/retreive', function(req, res){
         var notesToSend = [];
         for(var i=0; i<currentUser['notes'].length; i++ ){
           if(currentUser['notes'][i]['visibility']){
-            if(currentUser['notes'][i]['visibility'] === userAsking){
+            if(currentUser['notes'][i]['visibility'] === userAsking || currentUser['notes'][i]['visibility'] === "public"){
               notesToSend.push(currentUser['notes'][i]);
             }
           }
