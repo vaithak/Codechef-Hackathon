@@ -97,7 +97,6 @@ function getType(level){
 
 function recommend(user,isHard)
 {
-  //base case
   //setupquestionlevel in begining;
   var level,type;
   level=getLevel(user,isHard);
