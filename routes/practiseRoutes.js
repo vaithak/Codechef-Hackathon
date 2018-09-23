@@ -44,7 +44,7 @@ router.get('/', authCheck, function(req, res){
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
         recommend.reloadProblem(currentUser, accessToken).then(function(problem){
-          requestProblemData(problem['problemCode'], accessToken).then(function problemData(){
+          requestProblemData(problem['problemCode'], accessToken).then(function(problemData){
             problem['data'] = problemData;
             res.render('practise',{
               user: req.user.codechefId,
@@ -71,7 +71,7 @@ router.post('/hard', authCheck, function(req, res){
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
         recommend.recommendDifferentProblem(currentUser, accessToken, "harder").then(function(problem){
-          requestProblemData(problem['problemCode'], accessToken).then(function problemData(){
+          requestProblemData(problem['problemCode'], accessToken).then(function(problemData){
             problem['data'] = problemData;
             res.send(problem);
           });
@@ -97,7 +97,7 @@ router.post('/easy',authCheck,function(req,res){
     {
       refreshToken.refreshAccessToken(currentUser['refreshToken'] ,req.user.codechefId ,req ,res).then(function(accessToken){
         recommend.recommendDifferentProblem(currentUser, accessToken, "easier").then(function(problem){
-          requestProblemData(problem['problemCode'], accessToken).then(function problemData(){
+          requestProblemData(problem['problemCode'], accessToken).then(function(problemData){
             problem['data'] = problemData;
             res.send(problem);
           });
