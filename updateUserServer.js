@@ -53,6 +53,10 @@ const job = new CronJob('30 10 */10 * * *', function() {
               if(i<userlist.length)
                 recursive();
             });;
+          })
+          .catch(function(err){
+              console.log(err);
+              console.log("Continuing");
           });
          });
       }
