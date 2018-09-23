@@ -61,13 +61,19 @@
 })(jQuery);
 
 
-var noteTemp =  '<div class="note">'
-				+	'<a href="javascript:;" class="button remove">X</a>'
+var noteTemp =
+          '<div class="note">'
+				+	  '<a href="javascript:;" class="button remove">X</a>'
 				+ 	'<div class="note_cnt">'
-				+		'<textarea class="title" placeholder="Enter note title"></textarea>'
-				+ 		'<textarea class="cnt" placeholder="Enter note description here"></textarea>'
-				+	'</div> '
-				+'</div>';
+				+		 '<textarea class="title" placeholder="Enter note title"></textarea>'
+				+ 	 '<textarea class="cnt" placeholder="Enter note description here"></textarea>'
+        +     '<select>'
+        +       '<option value="onlyMe">Visible To Only Me</option>'
+        +       '<option value="friends">Visible To Only My Friends</option>'
+        +       '<option value="public">Visible To Everyone</option>'
+        +     '</select>'
+				+	   '</div> '
+				+  '</div>';
 
 var noteZindex = 1;
 function deleteNote(){
@@ -97,6 +103,9 @@ $(document).ready(function() {
     $.ajax({
        type: "POST",
        url: "/notes/retreive",
+       data:{
+         username: username
+       },
        success: function(result){
          if(result.length > 0)
          {
@@ -108,10 +117,13 @@ $(document).ready(function() {
            $('.note_cnt').each(function(i, obj) {
              $(obj).children('.title').val(result[i]['title']);
              $(obj).children('.cnt').val(result[i]['text']);
+             if(!result[i]['visibility'])
+              result[i]['visibility'] = "onlyMe";
+             $(obj).children('select').val(result[i]['visibility']);
            });
 
          }
-         else
+         else if(status === true)
          {
            newNote();
          }

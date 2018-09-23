@@ -13,8 +13,29 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', authCheck, function(req, res){
-    res.render('notes', { user: req.user.codechefId });
+    res.render('notes', {
+      user: req.user.codechefId ,
+      userToShow: req.user.codechefId
+    });
 });
+
+// Any user's notes
+router.get('/:username', function(req, res){
+    if(req.user){
+      res.render('notes', {
+        userToShow: req.params.username ,
+        user: req.user.codechefId
+      });
+    }
+    else{
+      res.render('notes', {
+        userToShow: req.params.username,
+        user: false
+       });
+    }
+});
+
+
 
 // Endpoint for saving the user's notes
 router.post('/save', authCheck, function(req, res){
@@ -30,9 +51,37 @@ router.post('/save', authCheck, function(req, res){
 });
 
 // Endpoint for Retreiving notes of a user
-router.post('/retreive', authCheck, function(req, res){
-    User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
-      res.send(currentUser.notes);
+router.post('/retreive', function(req, res){
+    User.findOne({codechefId: req.body.username}).then(function(currentUser){
+      if(currentUser){
+      var userAsking = "public";
+      if(req.user){
+        if(req.user.codechefId === req.body.username){
+          userAsking="onlyMe";
+        }
+        else if(currentUser['friends'].includes(req.body.username)){
+          userAsking="friends";
+        }
+      }
+
+      if(userAsking == "onlyMe"){
+        res.send(currentUser['notes']);
+      }
+      else{
+        var notesToSend = [];
+        for(var i=0; i<currentUser['notes'].length; i++ ){
+          if(currentUser['notes'][i]['visibility']){
+            if(currentUser['notes'][i]['visibility'] === userAsking){
+              notesToSend.push(currentUser['notes'][i]);
+            }
+          }
+        }
+        res.send(notesToSend);
+      }
+    }
+    else{
+      res.redirect('/');
+    }
     });
 });
 

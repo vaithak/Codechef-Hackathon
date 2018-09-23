@@ -55,6 +55,7 @@
                 <th>Codechef Rating</th>
                 <th>Institute</th>
                 <th>Profile</th>
+                <th>Visible Notes</th>
                 <th>Remove Friend</th>
               </tr>
             </thead>
@@ -94,6 +95,9 @@
                 <td><%= friends[i]['institute'] %></td>
                 <td>
                   <a class="profileLink" href="https://codechef.com/users/<%= friends[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View on Codechef</button></a>
+                </td>
+                <td>
+                  <a class="notesLink" href="/notes/<%= friends[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View Shared Notes</button></a>
                 </td>
                 <td class="removeFriend">
                   <span class="glyphicon glyphicon-remove"></span>
