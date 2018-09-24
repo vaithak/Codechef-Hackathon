@@ -156,11 +156,13 @@ function recommendDifferentProblem(currentUser,accessToken,generateType)
        // Person hast solved the last problem
        if(result['result']['data']['content'])
        {
-        if(currentUser['practiseLevel'].length>=20)
+        var practiseLength=currentUser['practiseLevel'].length;
+        if(practiseLength>=20)
         {
           currentUser['practiseLevel'].shift();
+          practiseLength--;
         }
-          currentUser['practiseLevel'].push(currentUser['practiseLevel'] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel']));
+          currentUser['practiseLevel'].push(currentUser['practiseLevel'][practiseLength-1] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel'][practiseLength-1]));
        }
        getProblemFromQuestionLevel(questionLevel).then(function(problem){
          User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {questionLevel: questionLevel, lastRecommended: problem, practiseLevel: currentUser['practiseLevel']}).then(function(currentUser){
@@ -193,11 +195,13 @@ function recommendDifferentProblem(currentUser,accessToken,generateType)
        // Person hast solved the last problem
        if(result['result']['data']['content'])
        {
-        if(currentUser['practiseLevel'].length>=20)
+        var practiseLength=currentUser['practiseLevel'].length;
+        if(practiseLength>=20)
         {
           currentUser['practiseLevel'].shift();
+          practiseLength--;
         }
-          currentUser['practiseLevel'].push(currentUser['practiseLevel'] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel']));
+          currentUser['practiseLevel'].push(currentUser['practiseLevel'][practiseLength-1]  + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel'][practiseLength-1]));
        }
        getProblemFromQuestionLevel(questionLevel).then(function(problem){
          User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {questionLevel: questionLevel, lastRecommended: problem, practiseLevel: currentUser['practiseLevel']}).then(function(currentUser){
