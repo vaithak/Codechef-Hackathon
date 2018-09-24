@@ -74,8 +74,51 @@ router.post('/search',authCheck,function(req,res){
 
 });
 
-// router.get('/:id', function(req,res){
-//
+// Route to show a particluar Article
+router.get('/:id', function(req,res){
+  Articles.findOne({_id: req.params.id}).then(function(idArticle){
+    if(idArticle){
+      if(idArticle['visibility']==="public"){
+        res.render('showIdArticle', {
+          user: user,
+          article: idArticle
+        });
+      }
+      else if(idArticle['visibility']==="friends" && req.user){
+        User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
+          if(authorUser['friends'].includes(req.user.codechefId)){
+            res.render('showIdArticle', {
+              user: user,
+              article: idArticle
+            });
+          }
+          else{
+            res.redirect('/articles/');
+          }
+        });
+      }
+      else{
+          res.redirect('/articles/');
+      }
+    }
+    else{
+        res.redirect('/articles/');
+    }
+  })
+  .catch(function(err){
+    console.log(err);
+    res.redirect('/error.html');
+  });
+});
+
+
+// Route to show articles of a given user
+// router.get('/users/:username', function(req,res){
+//   Articles.find({author: req.params.username}).then(function(idArticle){
+//     res.render('showUserArticles',{
+//       user: user
+//     });
+//   })
 // });
 
 module.exports = router;
