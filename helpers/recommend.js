@@ -139,8 +139,8 @@ function recommendDifferentProblem(currentUser,accessToken,generateType)
     // Recommending an easier problem
     else if(generateType === "easier"){
       var questionLevel = Math.max(0, currentUser['questionLevel'] - 3);
-
       // Checking if person has solved the last recommended problem
+      
       var options = {
          method: 'GET',
          uri: 'https://api.codechef.com/submissions/?result=AC&username=' + currentUser['codechefId'] + '&problemCode=' + currentUser['lastRecommended']['problemCode'],
@@ -156,7 +156,13 @@ function recommendDifferentProblem(currentUser,accessToken,generateType)
        // Person hast solved the last problem
        if(result['result']['data']['content'])
        {
-          currentUser['practiseLevel'] = currentUser['practiseLevel'] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel']);
+        var practiseLength=currentUser['practiseLevel'].length;
+        if(practiseLength>=20)
+        {
+          currentUser['practiseLevel'].shift();
+          practiseLength--;
+        }
+          currentUser['practiseLevel'].push(currentUser['practiseLevel'][practiseLength-1] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel'][practiseLength-1]));
        }
        getProblemFromQuestionLevel(questionLevel).then(function(problem){
          User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {questionLevel: questionLevel, lastRecommended: problem, practiseLevel: currentUser['practiseLevel']}).then(function(currentUser){
@@ -189,7 +195,13 @@ function recommendDifferentProblem(currentUser,accessToken,generateType)
        // Person hast solved the last problem
        if(result['result']['data']['content'])
        {
-          currentUser['practiseLevel'] = currentUser['practiseLevel'] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel']);
+        var practiseLength=currentUser['practiseLevel'].length;
+        if(practiseLength>=20)
+        {
+          currentUser['practiseLevel'].shift();
+          practiseLength--;
+        }
+          currentUser['practiseLevel'].push(currentUser['practiseLevel'][practiseLength-1]  + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel'][practiseLength-1]));
        }
        getProblemFromQuestionLevel(questionLevel).then(function(problem){
          User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {questionLevel: questionLevel, lastRecommended: problem, practiseLevel: currentUser['practiseLevel']}).then(function(currentUser){

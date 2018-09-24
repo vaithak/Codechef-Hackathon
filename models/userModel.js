@@ -17,7 +17,8 @@ const userSchema = new Schema({
     reminder:     	       {type : Boolean,"default" :false},
     friends:               {type : Array,  "default": []},
     questionLevel: 			   {type:  Number, "default": 0},
-    practiseLevel: 			   {type:  Number, "default":0}  
+    // practiseLevel:             {type:  Number,"default":1}
+    practiseLevel: 			   {type:  Array, "default":[0]}  
 });
 
 const User = mongoose.model('user', userSchema);

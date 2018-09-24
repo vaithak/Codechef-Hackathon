@@ -47,6 +47,7 @@ router.get('/', authCheck, function(req, res){
                 result: result['result']['data']['content'],
                 resultSubmission: resultSubmission['result']['data']['content'],
                 user: req.user.codechefId,
+                level:req.user.practiseLevel,
                 gravatar: md5(req.user.codechefId)
                });
 
