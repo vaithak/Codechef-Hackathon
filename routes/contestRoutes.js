@@ -72,7 +72,7 @@ router.get('/', authCheck, function(req, res){
     }
     else
     {
-      res.redirect('/error.html');
+      res.redirect('/');
     }
   });
 });
@@ -115,7 +115,7 @@ router.post('/remind', authCheck, function(req, res){
     }
     else
     {
-        res.redirect('/error.html');
+        res.redirect('/');
     }
 
 

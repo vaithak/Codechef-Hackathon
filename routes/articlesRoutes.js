@@ -40,11 +40,50 @@ router.post('/save', authCheck, function(req,res){
 });
 
 
+// Route to edit an Article
+router.get('/edit', authCheck, function(req,res){
+  Articles.findOne({_id: req.query.id, author: req.user.codechefId}).then(function(idArticle){
+    if(idArticle){
+      res.render("editArticle",{
+        user: req.user.codechefId,
+        article: idArticle
+      });
+    }
+    else{
+        res.redirect('/articles/');
+    }
+  })
+  .catch(function(err){
+    console.log(err);
+    res.redirect('/error.html');
+  });
+});
+
+
+// Route to save edited Article
+router.post('/edit', authCheck, function(req,res){
+  // console.log(req.body.content)
+  Articles.findOneAndUpdate({_id: req.body.id, author: req.user.codechefId},{$set: {title: req.body.title, content: req.body.content, tags: req.body.tags, visibility: req.body.visibility}}).then(function(idArticle){
+      res.redirect('/articles/');
+  })
+  .catch(function(err){
+    console.log(err);
+    res.redirect('/error.html');
+  });
+});
+
+
 // Route to show a particluar Article
 router.get('/:id', function(req,res){
   Articles.findOne({_id: req.params.id}).then(function(idArticle){
     if(idArticle){
       if(idArticle['visibility']==="public"){
+        var user;
+        if(!req.user)
+          user=false;
+        else
+          user=req.user.codechefId
+
         res.render('showIdArticle', {
           user: user,
           article: idArticle
@@ -54,7 +93,7 @@ router.get('/:id', function(req,res){
         User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
           if(authorUser['friends'].includes(req.user.codechefId)){
             res.render('showIdArticle', {
-              user: user,
+              user: req.user.codechefId,
               article: idArticle
             });
           }

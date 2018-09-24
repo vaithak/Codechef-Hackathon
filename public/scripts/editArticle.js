@@ -5,7 +5,7 @@ $(document).ready(function(){
   height: 300,
   theme: 'modern',
   plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help',
-  toolbar1: 'formatselect | bold italic sizeselect fontselect fontsizeselect strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | link image',
+  toolbar1: 'formatselect | bold italic sizeselect fontselect fontsizeselect strikethrough underline forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | link image',
   image_advtab: true,
   templates: [
     { title: 'Test template 1', content: 'Test 1' },
@@ -36,15 +36,16 @@ $(document).ready(function(){
       var bodyContent = tinymce.get('text').getContent();
       var visibility = $('.visibility').val();
       var tags = ($('#tags').val()).split(',');
-
+      console.log("fuck you")
       $.ajax({
         type: 'POST',
-        url: "/articles/save",
+        url: "/articles/edit",
         data:{
           title: title,
-          bodyContent: bodyContent,
+          content: bodyContent,
           visibility: visibility,
-          tags: tags
+          tags: tags,
+          id: id
         },
         success: function(result){
           window.location.href = "/articles/"

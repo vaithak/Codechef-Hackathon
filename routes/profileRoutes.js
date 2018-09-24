@@ -65,7 +65,7 @@ router.get('/', authCheck, function(req, res){
     }
     else
     {
-      res.redirect('/error.html');
+      res.redirect('/');
     }
   });
 });

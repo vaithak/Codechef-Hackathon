@@ -6,7 +6,7 @@ body{
 		width: 80%;
     height: 40%;
     position: absolute;
-    top:8%;
+    top:9%;
     left: 0;
     right: 0;
     margin: auto;
@@ -179,6 +179,17 @@ body{
 	display: flex;
 	width: 100%;
 	justify-content: space-between;
+}
+
+.data{
+	height: auto;
+	margin: 0px;
+	padding: 0px;
+}
+
+.data > h3, h2, h1, ul, p{
+	margin: 0px;
+	padding: 0px;
 }
 
 .link{

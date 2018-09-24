@@ -28,7 +28,9 @@ function requestProblemData(problemCode, accessToken){
 
     request(options)
     .then(function (result) {
-      resolve(result['result']['data']['content']['body']);
+      var toSend = result['result']['data']['content']['body'].replace(/(<br\s*\/?>){2,}/gi, '<br>');
+      // console.log(toSend);
+      resolve(toSend);
      })
     .catch(function (err) {
         console.log("Request error" + err);
@@ -56,7 +58,7 @@ router.get('/', authCheck, function(req, res){
     }
     else
     {
-      res.redirect('/error.html');
+      res.redirect('/');
     }
   })
   .catch(function(err){
@@ -84,8 +86,7 @@ router.post('/hard', authCheck, function(req, res){
     }
     else
     {
-      console.log("Request error" + err);
-      res.redirect('/error.html');
+      res.redirect('/');
     }
   });
 });
@@ -110,8 +111,7 @@ router.post('/easy',authCheck,function(req,res){
     }
     else
     {
-      console.log("Request error" + err);
-      res.redirect('/error.html');
+      res.redirect('/');
     }
   });
 });

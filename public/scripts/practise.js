@@ -77,6 +77,7 @@ $(document).ready(function(){
       $('.submissionDetails').html(result['successfulSubmissions']);
       $('.accuracyDetail').html(result['accuracy']);
       $('.link a').attr("href", "https://www.codechef.com/problems/" + result['problemCode']);
+      // console.log(result['data'])
       $('.data').html(result['data']);
       $('.question').css("display","block");
       $('.loading').css("display","none");
