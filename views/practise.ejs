@@ -105,6 +105,7 @@
     	var instances = M.Modal.init(elems);
       var elemSecond = document.querySelectorAll('.sidenav');
       var instances = M.Sidenav.init(elemSecond);
+			$(".dropdown-trigger").dropdown();
   	});
 
 	var problemData = <%- JSON.stringify(problem['data']) %>;

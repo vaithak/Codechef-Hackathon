@@ -14,25 +14,29 @@
 
   <div class="mainBody">
     <h1 class="bodyHeading"><center>Write an Article</center></h1>
-    <textarea id="text"></textarea>
-    <br><br>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
-          <input name="tags" id="tags"/>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-          <select class="pull-right form-control">
-            <option value="onlyMe">Visible To Only Me</option>
-            <option value="friends">Visible To Only My Friends</option>
-            <option value="public">Visible To Everyone</option>
-          </select>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-2 col-xs-6">
-          <button class="btn btn-success btn-md pull-right">Post Article</button>
+    <form class="articleForm">
+      <input type="text" name="articleTitle" placeholder="Enter Title for your Article" required style="width:100%;height:40px;margin-bottom:15px;border:2px solid">
+      <br>
+      <textarea id="text"></textarea>
+      <br><br>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
+            <input name="tags" id="tags"/>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
+            <select class="pull-right form-control visibility">
+              <option value="onlyMe">Visible To Only Me</option>
+              <option value="friends">Visible To Only My Friends</option>
+              <option selected value="public">Visible To Everyone</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-2 col-xs-6">
+            <button class="btn btn-success btn-md pull-right" type="submit">Post Article</button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
