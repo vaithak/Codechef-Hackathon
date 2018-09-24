@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Articles | LearnFromChef</title>
+		<link rel="stylesheet" href="/styles/articles.css">
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	</head>
+	<body>
+
+    <% include ../partials/header %>
+
+		<div class="mainBody">
+			<div id="exTab3" class="container-fluid">
+		    	<ul class="nav nav-pills row">
+					<li class="active col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-3 col-md-3 col-sm-3 col-xs-3">
+						<a href="#featuredArticles" data-toggle="tab"><center>Featured Articles</center></a>
+					</li>
+					<li class="col-lg-4 col-sm-4 col-xs-4 yourArticles">
+						<a href="#yourArticles" data-toggle="tab"><center>Your Articles</center></a>
+					</li>
+					<li class="col-lg-3 col-sm-3 col-xs-3">
+						<a href="#savedArticles" data-toggle="tab"><center>Saved Articles</center></a>
+					</li>
+				</ul>
+		  </div>
+
+      <hr style="border: 1px solid">
+
+			<div class="tab-content clearfix">
+			  <div class="tab-pane active" id="featuredArticles">
+				<h3>Same as example 1 but we have now styled the tab's corner</h3>
+			  </div>
+			  <div class="tab-pane" id="yourArticles">
+				<h3>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>
+			  </div>
+			  <div class="tab-pane" id="savedArticles">
+				<h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>
+			  </div>
+	  		</div>
+		</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

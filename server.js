@@ -1,15 +1,16 @@
-const express = require('express');
+const express       = require('express');
 const cookieSession = require('cookie-session');
-const passport = require('passport');
-const authRoutes = require('./routes/authRoutes');
-const notesRoutes = require('./routes/notesRoutes');
+const passport      = require('passport');
+const authRoutes    = require('./routes/authRoutes');
+const notesRoutes   = require('./routes/notesRoutes');
 const profileRoutes = require('./routes/profileRoutes');
-const practiseRoutes = require('./routes/practiseRoutes');
-const contestRoutes =require('./routes/contestRoutes');
-const friendsRoutes =require('./routes/friendRoutes');
+const practiseRoutes= require('./routes/practiseRoutes');
+const contestRoutes = require('./routes/contestRoutes');
+const friendsRoutes = require('./routes/friendRoutes');
+const articlesRoutes= require('./routes/articlesRoutes');
 const passportSetup = require('./config/passportSetup');
-const mongoose = require('mongoose');
-const keys = require('./config/keys');
+const mongoose      = require('mongoose');
+const keys          = require('./config/keys');
 
 mongoose.promise = global.promise;
 
@@ -45,6 +46,7 @@ app.use('/notes', notesRoutes);
 app.use('/contests',contestRoutes);
 app.use('/practise',practiseRoutes);
 app.use('/friends',friendsRoutes);
+app.use('/articles',articlesRoutes);
 
 app.get('/', function(req, res){
   if(req.user)

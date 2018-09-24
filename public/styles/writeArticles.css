@@ -1,0 +1,21 @@
+.mainBody{
+  width: 90% !important;
+  left: 5%;
+  border: 1px solid black;
+  position: absolute;
+  margin-top: 6% !important;
+  padding: 10px;
+}
+
+.mce-notification-warning{
+  display: none !important;
+}
+
+.bodyHeading{
+  text-decoration: underline;
+  font-family: fantasy;
+}
+
+.btn{
+  right:0px;
+}
