@@ -42,6 +42,16 @@ router.get('/', authCheck, function(req,res){
         });
       }
       else {
+        friendsData.sort(function(x,y){
+          if(x['ranking']!=0 && y['ranking']!=0)
+            return x['ranking'] - y['ranking'];
+          else if(x['ranking'] != 0)
+            return -1;
+          else if(y['ranking'] != 0)
+            return 1;
+          else
+            return 0;
+        });
         res.render('friends',{
           user: req.user.codechefId,
           friends: friendsData
@@ -54,7 +64,7 @@ router.get('/', authCheck, function(req,res){
 router.post('/remove', authCheck, function(req,res){
   var friendToRemove = req.body.friend;
   User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
-    if(currentUser)
+    if(currentUser && friendToRemove!=req.user.codechefId)
     {
       // console.log(currentUser['friends']);
       currentUser['friends'].splice(currentUser['friends'].indexOf(friendToRemove), 1);
@@ -64,6 +74,69 @@ router.post('/remove', authCheck, function(req,res){
     }
     else {
       res.send("Error");
+    }
+  });
+});
+
+router.post('/add', authCheck, function(req,res){
+  var friendToAdd = req.body.friend;
+  var confirmed = req.body.confirmed;
+  User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
+    if(currentUser)
+    {
+      // console.log(currentUser['friends']);
+      var data={};
+      var msg="";
+      if(currentUser['friends'].includes(friendToAdd))
+      {
+        msg="This Person is already your friend";
+        data['message']=msg;
+        res.send(data);
+      }
+      else
+      {
+        User.findOne({codechefId: friendToAdd}).then(function(person){
+          if(person)
+          {
+            if(confirmed == "true")
+            {
+              currentUser['friends'].push(person['codechefId']);
+              User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {$set: {friends: currentUser['friends'] }}).then(function(){
+                msg="Added";
+                data['message']=msg;
+                res.send(data);
+              })
+              .catch(function(err){
+                console.log(err);
+                res.redirect("/error.html");
+              });
+            }
+            else
+            {
+              msg="Confirm";
+              data['message']=msg;
+              var content = {};
+              content['ranking']   = person['ranking']['allContestRanking']['global'];
+              content['username']  = person['codechefId'];
+              content['rating']    = person['rating']['allContest'];
+              content['institute'] = person['institute'];
+              content['band']      = person['band'];
+
+              data['content']=content;
+              res.send(data);
+            }
+          }
+          else
+          {
+              msg="Username not found in our database";
+              data['message']=msg;
+              res.send(data);
+          }
+        });
+      }
+    }
+    else {
+      res.redirect("/error.html");
     }
   });
 });

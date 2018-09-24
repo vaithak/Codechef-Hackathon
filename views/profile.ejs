@@ -16,7 +16,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
   <% include ../partials/header %>
 
   <div id="mainBody">
@@ -118,17 +118,15 @@
           <h3 class="stylish text-center"><u>Practice Stats</u></h3>
           <br>
           <center>
-           <section id="skills" class="toad-fullscreen">
-                <article class="skills">
-                    <div class="t-6">
-                        <p>Practise Level<span></span><span class="skills"></span></p>
-                    </div>
-                </article>
-            </section>
-          </center>
+          <div style="width:80%">
+            <div>
+              <canvas id="canvas" height="350" width="600"></canvas>
+            </div>
+          </div>
+        </center>
           <br>
           <br>
-          <h6>*Note that we trace your progress only through the questions recommended through us</h6>
+          <h6>*Note that the graph depends on the difficulty of questions solved on our platform</h6>
 
           <hr style="border: 1px solid black">
           <h3 class="stylish text-center"><u>Submission Stats</u></h3>
@@ -324,6 +322,28 @@
   </div>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script type="text/javascript" src="/scripts/lineChart.js"></script>
+<script type="text/javascript">
+  var data = <%- JSON.stringify(level) %>;
+  var lineChartData = {
+    labels: ["", "", "", "", "", "", "", "","","","","","","","","","","","","",""],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(16,133,135,1)",
+        pointColor: "rgba(16,133,135,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(16,133,135,1)",
+        data: data
+    }]
+  }
+  window.onload = function() {
+    var ctx = document.getElementById("canvas").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData, {
+        responsive: true
+    });
+}
+</script>
 <script type="text/javascript">
 var data = <%- JSON.stringify(result['submissionStats']) %>;
 var newPieData = [

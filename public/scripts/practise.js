@@ -57,19 +57,18 @@ $(document).ready(function(){
   $('.Easier').on('click', function(){
     recommend("easy");
   });
+
   $('.Harder').on('click', function(){
     recommend("hard");
   });
-  
+
   function recommend(type){
     $('.question').css("display","none");
     $('.loading').css("display","block");
     $.ajax({
       type: "POST",
       url: "/practise/"+type,
-      // data: {
-      //   difficulty:type
-      // },
+
       success: function(result){
       console.log(result);
       $('.questionName > h3').html(result['problemName']);
@@ -81,10 +80,8 @@ $(document).ready(function(){
       $('.data').html(result['data']);
       $('.question').css("display","block");
       $('.loading').css("display","none");
-      // problemData = result['data'];
       }
     });
 
   }
 });
-

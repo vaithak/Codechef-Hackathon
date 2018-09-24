@@ -49,3 +49,50 @@ $('.removeFriend').on('click',function(){
     });
   }
 });
+
+$('.searchFriend').submit(function(e){
+  var userToAdd = $('input[name=friend]').val();
+  $('input[name=friend]').val("");
+  $('.returnFriendStatus').css("display","none");
+  var status = confirmed;
+
+  $.ajax({
+     type: "POST",
+     url: "/friends/add",
+     data:{
+       friend: userToAdd,
+       confirmed: status
+     },
+     success: function(result){
+       // console.log(result);
+       if(result['message']!="Confirm")
+       {
+          $('.returnFriendStatus').css("display","inline");
+          $('.returnFriendStatus').html(result['message']);
+
+          if(result['message']=="Added")
+            window.location.reload();
+       }
+       else
+       {
+          $('.displaySearchResult').css("display","block");
+          $('.displaySearchResult').find('.username').html("<b>Name: </b><span>" + result['content']['username'] + "</span>");
+          $('.displaySearchResult').find('.ranking').html("<b>Global Ranking: </b><span>" + result['content']['ranking'] + "</span>");
+          $('.displaySearchResult').find('.rating').html("<b>Codechef Rating: </b><span>" + result['content']['rating'] + "</span>");
+          $('.displaySearchResult').find('.institute').html("<b>Institute: </b><span>" + result['content']['institute'] + "</span>");
+       }
+
+     }
+  });
+
+  confirmed=false; // for further adding of friends
+  return false;
+});
+
+$('.confirmFriend').on('click',function(){
+  confirmed = true;
+  var userToAdd = $(this).siblings('.username').find('span').html();
+  $('input[name=friend]').val(userToAdd);
+  $('.searchFriend').submit();
+  $('.displaySearchResult').css("display","none");
+});

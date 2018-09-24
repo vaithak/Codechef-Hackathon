@@ -1,129 +1,216 @@
-const request = require('request-promise');
-const questions=require('./../models/QuestionsModel');
-const User=require('./../models/userModel');
+const request   = require('request-promise');
+const Questions = require('./../models/QuestionsModel');
+const User      = require('./../models/userModel');
+
+// Generates a random number from [min,max]
 function random(min,max){
   return min + Math.floor(Math.random() * (max-min));
 }
 
-function algo(username,accessToken){
-  return Math.floor(Math.random() * 100);
+// For getting the incremental value for practise rating according to level and problem solved
+function increasePractiseScore(problemCategory, practiseLevel){
+
+  var incrementScore = [
+    {
+      'school'    : 50,
+      'easy'      : 100,
+      'medium'    : 200,
+      'hard'      : 300,
+      'challenge' : 500
+    },
+    {
+      'school'    : 20,
+      'easy'      : 80,
+      'medium'    : 150,
+      'hard'      : 250,
+      'challenge' : 400
+    },
+    {
+      'school'    : 0,
+      'easy'      : 50,
+      'medium'    : 100,
+      'hard'      : 200,
+      'challenge' : 300
+    },
+    {
+      'school'    : -50,
+      'easy'      : 0,
+      'medium'    : 50,
+      'hard'      : 150,
+      'challenge' : 200
+    },
+    {
+      'school'    : -100,
+      'easy'      : -50,
+      'medium'    : 10,
+      'hard'      : 100,
+      'challenge' : 150
+    },
+    {
+      'school'    : -200,
+      'easy'      : -100,
+      'medium'    : -50,
+      'hard'      : 10,
+      'challenge' : 50
+    }
+  ];
+
+  var levelIndex = Math.max(practiseLevel/600 , 5);
+  return incrementScore[levelIndex][problemCategory];
 }
 
-function recommendProblem(username,accessToken){
-  return new Promise(function(resolve,reject){
-    // Algo
-    var customRating = algo(username,accessToken);
-    var categories = ["school", "easy","medium","hard"];
+// Function to return problem from given questionLevel
+function getProblemFromQuestionLevel(questionLevel){
+  return new Promise(function(resolve, reject){
 
-    var userCategory = categories[Math.floor(customRating/25)];
-    var sortBy="successfulSubmissions";
-    var sortOrder="desc";
-    var limit=100;
-    var problemNumber = random(25*Math.floor(customRating/25) , 25*(Math.floor(customRating/25) + 1));
-    // Algo end
-
-    // Send request
-    var options = {
-      method: 'GET',
-      uri: 'https://api.codechef.com/problems/' + userCategory + "?limit=" + limit + "&sortBy=" + sortBy + "&sortOrder=" + sortOrder,
-      headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + accessToken
-      },
-      json: true // Automatically parses the JSON string in the response
-    };
-
-    request(options)
-      .then(function(result) {
-        // console.log(result);
-        var problem = result['result']['data']['content'][problemNumber];
-        // console.log(problem);
-        problem['category']=userCategory;
+    if(questionLevel<100){
+      Questions.find().then(function(questionData){
+        var problem = questionData[0]['school'][questionLevel];
+        problem['category'] = 'school';
         resolve(problem);
+      });
+    }
+    else if(questionLevel<200){
+      Questions.find().then(function(questionData){
+        var problem = questionData[0]['easy'][questionLevel-100];
+        problem['category'] = 'easy';
+        resolve(problem);
+      });
+    }
+    else if(questionLevel<300){
+      Questions.find().then(function(questionData){
+        var problem = questionData[0]['medium'][questionLevel-200];
+        problem['category'] = 'medium';
+        resolve(problem);
+      });
+    }
+    else if(questionLevel<400){
+      Questions.find().then(function(questionData){
+        var problem = questionData[0]['hard'][random(0,100)];
+        problem['category'] = 'hard';
+        resolve(problem);
+      });
+    }
+    else{
+      Questions.find().then(function(questionData){
+        var problem = questionData[0]['challenge'][random(0,100)];
+        problem['category'] = 'challenge';
+        resolve(problem);
+      });
+    }
+
+  });
+}
+
+
+// For displaying problem when page is loaded
+function reloadProblem(currentUser, accessToken){
+  return new Promise(function(resolve,reject){
+
+    // First time recommending a problem
+    if(Object.keys(currentUser['lastRecommended']).length === 0){
+      recommendDifferentProblem(currentUser,accessToken,"firstTime").then(function(problem){
+        resolve(problem);
+      });
+    }
+    // Returning the previously recommended problem
+    else{
+      resolve(currentUser['lastRecommended']);
+    }
+  });
+}
+
+// Recommending an easier, harder or problem for firstTime
+function recommendDifferentProblem(currentUser,accessToken,generateType)
+{
+  return new Promise(function(resolve, reject){
+    if(generateType === "firstTime"){
+      var questionLevel = 45*(Math.floor(currentUser['rating']['allContest']/500) + 1);
+
+      getProblemFromQuestionLevel(questionLevel).then(function(problem){
+        User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {questionLevel: questionLevel, lastRecommended: problem}).then(function(currentUser){
+          resolve(problem);
+        });
       })
       .catch(function(err){
-        console.log("Request error" + err);
         reject(err);
       });
+    }
+    // Recommending an easier problem
+    else if(generateType === "easier"){
+      var questionLevel = Math.max(0, currentUser['questionLevel'] - 3);
+      // Checking if person has solved the last recommended problem
+      
+      var options = {
+         method: 'GET',
+         uri: 'https://api.codechef.com/submissions/?result=AC&username=' + currentUser['codechefId'] + '&problemCode=' + currentUser['lastRecommended']['problemCode'],
+         headers: {
+             'Accept': 'application/json',
+             'Authorization': 'Bearer ' + accessToken
+         },
+         json: true
+      };
 
+     request(options)
+     .then(function (result) {
+       // Person hast solved the last problem
+       if(result['result']['data']['content'])
+       {
+        if(currentUser['practiseLevel'].length>=20)
+        {
+          currentUser['practiseLevel'].shift();
+        }
+          currentUser['practiseLevel'].push(currentUser['practiseLevel'] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel']));
+       }
+       getProblemFromQuestionLevel(questionLevel).then(function(problem){
+         User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {questionLevel: questionLevel, lastRecommended: problem, practiseLevel: currentUser['practiseLevel']}).then(function(currentUser){
+           resolve(problem);
+         });
+       });
+     })
+     .catch(function(err){
+       reject(err);
+     });
+
+    }
+    // Recommend a harder problem
+    else{
+      var questionLevel = Math.min(500, currentUser['questionLevel'] + 17);
+
+      // Checking if person has solved the last recommended problem
+      var options = {
+         method: 'GET',
+         uri: 'https://api.codechef.com/submissions/?result=AC&username=' + currentUser['codechefId'] + '&problemCode=' + currentUser['lastRecommended']['problemCode'],
+         headers: {
+             'Accept': 'application/json',
+             'Authorization': 'Bearer ' + accessToken
+         },
+         json: true
+      };
+
+     request(options)
+     .then(function (result) {
+       // Person hast solved the last problem
+       if(result['result']['data']['content'])
+       {
+        if(currentUser['practiseLevel'].length>=20)
+        {
+          currentUser['practiseLevel'].shift();
+        }
+          currentUser['practiseLevel'].push(currentUser['practiseLevel'] + increasePractiseScore(currentUser['lastRecommended']['category'], currentUser['practiseLevel']));
+       }
+       getProblemFromQuestionLevel(questionLevel).then(function(problem){
+         User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {questionLevel: questionLevel, lastRecommended: problem, practiseLevel: currentUser['practiseLevel']}).then(function(currentUser){
+           resolve(problem);
+         });
+       });
+     })
+     .catch(function(err){
+       reject(err);
+     });
+    }
   });
 }
 
-function getLevel(user,isHard)
-{
-  var level;
-  if(isHard)
-  {
-    level=user['questionLevel']+14;
-  }
-  else
-  {
-    level=user['questionLevel']-30;
-  }
-  if(level<0)
-  {
-    level=0;
-  }
-  else if(level>=3600)
-  {
-    level=3599;
-  }
-  return level;
-}
-
-function getType(level){
-  var type;
-  level/=600;
-  level=parseInt(level);
-  switch(level)
-  {
-    case 0:type="school";
-    break;
-    case 1:type="easy";
-    break;
-    case 2:type="medium";
-    break;
-    case 3:type="hard";
-    break;
-    case 4:type="challenge";
-    break;
-    case 5:type="extcontest";
-    break;
-    default:type="school";
-    break;
-  }
-  return type;
-}
-
-function recommend(user,isHard)
-{
-  //setupquestionlevel in begining;
-  var level,type;
-  level=getLevel(user,isHard);
-  User.findOneAndUpdate({codechefId:user['codechefId']},{$set:{'questionLevel':level}},function(err){
-    // console.log("Success");
-  });
-  level=(level+user['rating']['allContest'])/2;
-  type=getType(level,user);
-
-  return new Promise(function(resolve,reject){
-    level=level/6;
-    level=parseInt(level);
-    level%=100;
-    questions.find({},function(err,docs){
-      if(docs.length)
-      {
-        var problem=docs[0][type][level];
-        problem['category']=type;
-        resolve(problem);
-      }
-      else
-      {
-        reject("Failed");
-      }
-    });
-  });
-}
-
-module.exports.recommendProblem = recommendProblem;
-module.exports.recommend=recommend;
+module.exports.reloadProblem             = reloadProblem;
+module.exports.recommendDifferentProblem = recommendDifferentProblem;

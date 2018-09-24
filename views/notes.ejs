@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title><%= user %>'s Notes | LearnFromChef</title>
+  <title><%= userToShow %>'s Notes | LearnFromChef</title>
   <link href='https://fonts.googleapis.com/css?family=Gloria+Hallelujah' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/styles/notesStyle.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -18,12 +18,19 @@
 
   <% include ../partials/header %>
 
-  <a href="javascript:;" class="button" id="add_new">Add New Note</a>
-  <a href="javascript:;" class="button" id="save">Save all notes</a>
+  <% if(user && (user === userToShow)){ %>
+    <a href="javascript:;" class="button" id="add_new">Add New Note</a>
+    <a href="javascript:;" class="button" id="save">Save all notes</a>
+  <% } %>
   <div id="board"></div>
+  <script type="text/javascript">
+    var username = "<%= userToShow %>";
+    var status = <%= user === userToShow %>;
+  </script>
   <script type="text/javascript" src="/scripts/notes.js"></script>
-  <script type="text/javascript" src="/scripts/saveNotes.js"></script>
+  <% if(user && (user === userToShow)){ %>
+    <script type="text/javascript" src="/scripts/saveNotes.js"></script>
+  <% } %>
 
 </body>
-
 </html>

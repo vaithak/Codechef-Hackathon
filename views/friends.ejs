@@ -14,20 +14,33 @@
     <div class="mainPage">
       <div class="container-fluid">
         <div class="row">
-          <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12" method="post" action="/friends/search">
+          <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 searchFriend">
             <div class="container-fluid">
               <div class="row">
                 <div class="search-input col-sm-10 col-xs-10">
-                    <input type="text">
+                    <input type="text" name="friend" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
-                    <label>Add New Friend</label>
+                    <label>Search New Friend with Username</label>
                     <span class="glyphicon glyphicon-search"></span>
                     <span class="glyphicon glyphicon-remove"></span>
                 </div>
               </div>
             </div>
           </form>
+        </div>
+
+        <p style="display:none" class="returnFriendStatus"></p>
+        <div class="container displaySearchResult" style="display:none">
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="username"></p>
+              <p class="ranking"></p>
+              <p class="rating"></p>
+              <p class="institute"></p>
+              <button class="btn btn-success confirmFriend">Confirm Adding Friend</button>
+            </div>
+          </div>
         </div>
 
         <br>
@@ -42,16 +55,13 @@
                 <th>Codechef Rating</th>
                 <th>Institute</th>
                 <th>Profile</th>
+                <th>Visible Notes</th>
                 <th>Remove Friend</th>
               </tr>
             </thead>
 
             <tbody class="tableData">
-            <% friends.sort(function(x,y){
-                return x['ranking'] - y['ranking'];
-              });
-
-              for(var i=0;i < friends.length; i++){ %>
+            <% for(var i=0;i < friends.length; i++){ %>
 
                 <% var number = parseInt(friends[i]['band']['0']); %>
                 <% if(number == 1)
@@ -68,6 +78,8 @@
                     color= "orange";
                   else if(number == 7)
                     color= "red";
+                  else
+                    color="black";
                 %>
 
               <tr>
@@ -83,6 +95,9 @@
                 <td><%= friends[i]['institute'] %></td>
                 <td>
                   <a class="profileLink" href="https://codechef.com/users/<%= friends[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View on Codechef</button></a>
+                </td>
+                <td>
+                  <a class="notesLink" href="/notes/<%= friends[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View Shared Notes</button></a>
                 </td>
                 <td class="removeFriend">
                   <span class="glyphicon glyphicon-remove"></span>
@@ -102,6 +117,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
       var currUser = "<%= user %>";
+      var confirmed = false;
     </script>
     <script type="text/javascript" src="/scripts/friends.js"></script>
   </body>

@@ -6,8 +6,7 @@ const QuestionsSchema = new Schema({
     easy: {type : Object, "default" : {}},
     medium: {type : Object, "default" : {}},
     hard: {type : Object, "default" : {}},
-    challenge: {type : Object, "default" : {}},
-    extcontest: {type : Object, "default" : {}}
+    challenge: {type : Object, "default" : {}}
 });
 
 const questions = mongoose.model('Questions', QuestionsSchema);
