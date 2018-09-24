@@ -17,19 +17,41 @@ $(document).ready(function(){
   ]
  });
 
-
-  $('#submit').on('click',function(){
-    console.log(tinymce.get('text').getContent());
-  });
-
   $('#tags').tagsInput({
      'height': '38px',
      'width' :'100%',
      'defaultText':'Add tags',
      'interactive':true,
-     'delimiter': [',',';'],   // Or a string with a single delimiter. Ex: ';'
+     'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
      'removeWithBackspace' : true,
      'minChars' : 0,
      'placeholderColor' : '#666666'
   });
+
+  $('.articleForm').submit(function(){
+    var title = $('input[name=articleTitle]').val();
+    if(title.length == 0)
+      return false;
+    else{
+      var bodyContent = tinymce.get('text').getContent();
+      var visibility = $('.visibility').val();
+      var tags = ($('#tags').val()).split(',');
+
+      $.ajax({
+        type: 'POST',
+        url: "/articles/save",
+        data:{
+          title: title,
+          bodyContent: bodyContent,
+          visibility: visibility,
+          tags: tags
+        },
+        success: function(result){
+          window.location.href = "/articles/"
+        }
+      });
+    }
+    return false;
+  });
+
 });
