@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Friends | LearnFromChef</title>
+    <title>Following | LearnFromChef</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/styles/friends.css" rel="stylesheet">
+    <link href="/styles/following.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
@@ -15,14 +15,14 @@
     <div class="mainPage">
       <div class="container-fluid">
         <div class="row">
-          <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 searchFriend">
+          <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 searchFollow">
             <div class="container-fluid">
               <div class="row">
                 <div class="search-input col-sm-10 col-xs-10">
-                    <input type="text" name="friend" required>
+                    <input type="text" name="follow" required>
                     <span class="highlight"></span>
                     <span class="bar"></span>
-                    <label>Search New Friend with Username</label>
+                    <label>Search Person with Username</label>
                     <span class="glyphicon glyphicon-search"></span>
                     <span class="glyphicon glyphicon-remove"></span>
                 </div>
@@ -31,7 +31,7 @@
           </form>
         </div>
 
-        <p style="display:none" class="returnFriendStatus"></p>
+        <p style="display:none" class="returnFollowStatus"></p>
         <div class="container displaySearchResult" style="display:none">
           <div class="row">
             <div class="col-xs-12">
@@ -39,7 +39,7 @@
               <p class="ranking"></p>
               <p class="rating"></p>
               <p class="institute"></p>
-              <button class="btn btn-success confirmFriend">Confirm Adding Friend</button>
+              <button class="btn btn-success confirmFollow">Confirm Following</button>
             </div>
           </div>
         </div>
@@ -62,9 +62,9 @@
             </thead>
 
             <tbody class="tableData">
-            <% for(var i=0;i < friends.length; i++){ %>
+            <% for(var i=0;i < following.length; i++){ %>
 
-                <% var number = parseInt(friends[i]['band']['0']); %>
+                <% var number = parseInt(following[i]['band']['0']); %>
                 <% if(number == 1)
                     color="grey";
                    else if(number == 2)
@@ -84,26 +84,26 @@
                 %>
 
               <tr>
-                <td><%= friends[i]['ranking'] %></td>
+                <td><%= following[i]['ranking'] %></td>
                 <td><span class="rating" style="display: inline-block;
                       font-size: 10px;
                       background: <%= color %>;
                       padding: 0 3px;
                       line-height: 1.3;
                       color: white;
-                      margin-right: 2px;"> <%= number %>★</span><span class="username"><%= friends[i]['username'] %></span></td>
-                <td><%= friends[i]['rating'] %></td>
-                <td><%= friends[i]['institute'] %></td>
+                      margin-right: 2px;"> <%= number %>★</span><span class="username"><%= following[i]['username'] %></span></td>
+                <td><%= following[i]['rating'] %></td>
+                <td><%= following[i]['institute'] %></td>
                 <td>
-                  <a class="profileLink" href="https://codechef.com/users/<%= friends[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View on Codechef</button></a>
+                  <a class="profileLink" href="https://codechef.com/users/<%= following[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View on Codechef</button></a>
                 </td>
                 <td>
-                  <a class="notesLink" href="/notes/<%= friends[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View Shared Notes</button></a>
+                  <a class="notesLink" href="/notes/<%= following[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View Shared Notes</button></a>
                 </td>
                 <td>
-                  <a class="articlesLink" href="/articles/users/<%= friends[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View Articles</button></a>
+                  <a class="articlesLink" href="/articles/users/<%= following[i]['username'] %>"><button type="button" class="btn btn-sm btn-info">View Articles</button></a>
                 </td>
-                <td class="removeFriend">
+                <td class="unFollow">
                   <span class="glyphicon glyphicon-remove"></span>
                 </td>
               </tr>
@@ -124,6 +124,6 @@
       var currUser = "<%= user %>";
       var confirmed = false;
     </script>
-    <script type="text/javascript" src="/scripts/friends.js"></script>
+    <script type="text/javascript" src="/scripts/following.js"></script>
   </body>
 </html>

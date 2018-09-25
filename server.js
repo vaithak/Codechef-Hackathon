@@ -6,7 +6,7 @@ const notesRoutes   = require('./routes/notesRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const practiseRoutes= require('./routes/practiseRoutes');
 const contestRoutes = require('./routes/contestRoutes');
-const friendsRoutes = require('./routes/friendRoutes');
+const followingRoutes = require('./routes/followingRoutes');
 const articlesRoutes= require('./routes/articlesRoutes');
 const passportSetup = require('./config/passportSetup');
 const mongoose      = require('mongoose');
@@ -34,7 +34,10 @@ app.use(passport.session());
 // connect to mongodb
 mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function(err) {
   if(err)
+  {
     throw err;
+    exit();
+  }
 
   console.log('connected to mongodb');
 });
@@ -45,7 +48,7 @@ app.use('/profile', profileRoutes);
 app.use('/notes', notesRoutes);
 app.use('/contests',contestRoutes);
 app.use('/practise',practiseRoutes);
-app.use('/friends',friendsRoutes);
+app.use('/following',followingRoutes);
 app.use('/articles',articlesRoutes);
 
 app.get('/', function(req, res){

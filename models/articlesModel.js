@@ -6,6 +6,8 @@ const ArticlesSchema = new Schema({
     author:     String,
     content:    String,
     visibility: String,
+    likes:      {type : Number,  "default": 0},
+    dislikes:   {type : Number,  "default": 0},
     tags:       {type : Array,  "default": []}
 });
 

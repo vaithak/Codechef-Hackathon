@@ -6,25 +6,110 @@
     <title>Articles | LearnFromChef</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
     <link rel="stylesheet" href="/styles/prism.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <style media="screen">
       .mainBody{
-        margin-top: 6%
+        margin: 8%;
+        position: relative;
       }
     </style>
   </head>
   <body>
     <% include ../partials/header %>
+    <% var number = parseInt(author['band']['0']); %>
+    <% if(number == 1)
+        color="grey";
+       else if(number == 2)
+        color="green";
+      else if(number == 3)
+          color="blue";
+      else if(number == 4)
+        color= "purple";
+      else if(number == 5)
+        color= "yellow";
+      else if(number == 6)
+        color= "orange";
+      else if(number == 7)
+        color= "red";
+      else
+        color="grey";
+    %>
 
     <div class="mainBody">
-      <center><h1><%= article['title'] %></h1></center>
+      <center><u><h1 style="text-decoration: underline, font-family: cursive"><%= article['title'] %></h1></u></center>
+      <br>
+        <div class="container" style="position:relative;width:80%; margin-left:10%">
+          <div class="row" style="border:1px solid;padding:20px">
+            <div class="col-lg-2 col-md-2 col-xs-4 gravatarImage">
+              <center>
+                <img class="img img-circle" style="background-color: #cff" src= <%= "https://www.gravatar.com/avatar/" + gravatar + "?d=robohash" %> \>
+                <br>
+                <% for(var i=0; i < number ; i++) { %>
+                  <span <%= "style=color:" + color %> class="fa fa-star checked"></span>
+                <% } %>
+              </center>
+            </div>
+            <div class="col-lg-5 col-md-6 col-xs-6 authorBio">
+              <h4><%= author['fullname'] %></h4>
+              <b>Username:</b>&nbsp;&nbsp;<span class="rating" style="display: inline-block;
+                    font-size: 10px;
+                    padding: 0 3px;
+                    background-color: <%= color %>;
+                    line-height: 1.3;
+                    color: white;
+                    margin-right: 2px;"> <%= author['band'][0] %>★</span><span>&nbsp; <%= author['codechefId'] %></span>
+                    <br>
+                    <br>
+              <div class="container-fluid" style="padding:0px">
+                <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                    <a class="articlesLink" href="/articles/users/<%= author['codechefId'] %>"><button type="button" class="btn btn-sm btn-info">View Articles</button></a>
+                  </div>
+                  <div class="col-xs-6">
+                    <% if(followingBool){ %>
+                      <a class="followLink" id="alreadyFollowing" href="#"><button type="button" class="btn btn-sm btn-basic">Following</button></a>
+                    <% } else { %>
+                      <a class="followLink" id="<%= author['codechefId'] %>"><button type="button" class="btn btn-sm btn-info">Follow</button></a>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       <hr>
       <%- article['content'] %>
+
+      <hr>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-6">
+            <% for( var i=1; i <= article['tags'].length ; i++){
+              if( i%4 == 0){ %>
+                <br><br>
+              <% } %>
+              <a href="#!" style="background-color: rgba(0,0,0,.14); padding:10px; border-radius:20px"><%= article['tags'][i-1] %></a>
+            <% } %>
+          </div>
+          <div class="col-xs-6">
+            <div class="reactions pull-right">
+              <i class="fa fa-2x fa-thumbs-o-up" id="like" aria-hidden="true"><span style="font-size:12px"><%= article['likes'] %></span></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <i class="fa fa-2x fa-thumbs-o-down" id="dislike" aria-hidden="true"><span style="font-size:12px"><%= article['dislikes'] %></span></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <i class="fa fa-2x fa-bookmark-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </body>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/scripts/prism.js">
-
+  <script type="text/javascript">
+    var id = "<%= article['_id'] %>";
   </script>
+  <script type="text/javascript" src="/scripts/showIdArticle.js"></script>
+  <script type="text/javascript" src="/scripts/prism.js"></script>
 </html>

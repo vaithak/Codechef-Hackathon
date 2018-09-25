@@ -5,7 +5,7 @@ const refreshToken = require('../config/refreshToken');
 const bodyParser = require('body-parser');
 const authCheck = function(req, res, next){
     if(!req.user){
-        res.redirect('/');
+        res.send("Login");
     } else {
         next();
     }
@@ -16,10 +16,10 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', authCheck, function(req,res){
   User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
-    var friendsData = [];
+    var followingData = [];
     var i=0;
     // console.log(currentUser)
-    var arrayLength = currentUser['friends'].length;
+    var arrayLength = currentUser['following'].length;
     // console.log(arrayLength);
     recursive();
 
@@ -27,22 +27,22 @@ router.get('/', authCheck, function(req,res){
       if(i < arrayLength)
       {
         var temp = {};
-        User.findOne({codechefId: currentUser['friends'][i]}).then(function(currentFriend){
-          if(currentFriend)
+        User.findOne({codechefId: currentUser['following'][i]}).then(function(currentFollowing){
+          if(currentFollowing)
           {
-            temp['ranking']   = currentFriend['ranking']['allContestRanking']['global'];
-            temp['username']  = currentFriend['codechefId'];
-            temp['rating']    = currentFriend['rating']['allContest'];
-            temp['institute'] = currentFriend['institute'];
-            temp['band']      = currentFriend['band'];
-            friendsData.push(temp);
+            temp['ranking']   = currentFollowing['ranking']['allContestRanking']['global'];
+            temp['username']  = currentFollowing['codechefId'];
+            temp['rating']    = currentFollowing['rating']['allContest'];
+            temp['institute'] = currentFollowing['institute'];
+            temp['band']      = currentFollowing['band'];
+            followingData.push(temp);
           }
           i++;
           recursive();
         });
       }
       else {
-        friendsData.sort(function(x,y){
+        followingData.sort(function(x,y){
           if(x['ranking']!=0 && y['ranking']!=0)
             return x['ranking'] - y['ranking'];
           else if(x['ranking'] != 0)
@@ -52,9 +52,9 @@ router.get('/', authCheck, function(req,res){
           else
             return 0;
         });
-        res.render('friends',{
+        res.render('following',{
           user: req.user.codechefId,
-          friends: friendsData
+          following: followingData
         });
       }
     }
@@ -62,13 +62,12 @@ router.get('/', authCheck, function(req,res){
 });
 
 router.post('/remove', authCheck, function(req,res){
-  var friendToRemove = req.body.friend;
+  var unFollow = req.body.unFollow;
   User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
-    if(currentUser && friendToRemove!=req.user.codechefId)
+    if(currentUser && unFollow!=req.user.codechefId)
     {
-      // console.log(currentUser['friends']);
-      currentUser['friends'].splice(currentUser['friends'].indexOf(friendToRemove), 1);
-      User.findOneAndUpdate({codechefId: req.user.codechefId}, {$set: {friends: currentUser['friends'] } }).then(function(){
+      currentUser['following'].splice(currentUser['following'].indexOf(unFollow), 1);
+      User.findOneAndUpdate({codechefId: req.user.codechefId}, {$set: {following: currentUser['following'] } }).then(function(){
         res.send("Done");
       });
     }
@@ -79,29 +78,28 @@ router.post('/remove', authCheck, function(req,res){
 });
 
 router.post('/add', authCheck, function(req,res){
-  var friendToAdd = req.body.friend;
+  var toFollow = req.body.follow;
   var confirmed = req.body.confirmed;
   User.findOne({codechefId: req.user.codechefId}).then(function(currentUser){
     if(currentUser)
     {
-      // console.log(currentUser['friends']);
       var data={};
       var msg="";
-      if(currentUser['friends'].includes(friendToAdd))
+      if(currentUser['following'].includes(toFollow))
       {
-        msg="This Person is already your friend";
+        msg="You are already following this person";
         data['message']=msg;
         res.send(data);
       }
       else
       {
-        User.findOne({codechefId: friendToAdd}).then(function(person){
+        User.findOne({codechefId: toFollow}).then(function(person){
           if(person)
           {
             if(confirmed == "true")
             {
-              currentUser['friends'].push(person['codechefId']);
-              User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {$set: {friends: currentUser['friends'] }}).then(function(){
+              currentUser['following'].push(person['codechefId']);
+              User.findOneAndUpdate({codechefId: currentUser['codechefId']}, {$set: {following: currentUser['following'] }}).then(function(){
                 msg="Added";
                 data['message']=msg;
                 res.send(data);

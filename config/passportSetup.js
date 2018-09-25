@@ -51,13 +51,14 @@ var strategy = new OAuth2Strategy({
             }
             else
             {
-              var friends = [username];
+              var following = [username];
                 new User({
+                    fullname:             result['result']['data']['content']['fullname'],
                     codechefId:           username,
                     refreshToken:         refreshToken,
                     accessToken:          accessToken,
                     accessTokenTimeStamp: +(new Date().getTime()),
-                    friends:              friends,
+                    following:            following,
                     ranking:              result['result']['data']['content']['rankings'],
             	    	rating :              result['result']['data']['content']['ratings'],
             	    	institute:            result['result']['data']['content']['organization'],

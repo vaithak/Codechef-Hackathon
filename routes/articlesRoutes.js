@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const Articles = require('../models/articlesModel');
 const refreshToken = require('../config/refreshToken');
 const bodyParser = require('body-parser');
+const md5 = require('md5');
 
 const authCheck = function(req, res, next){
     if(!req.user){
@@ -41,7 +42,7 @@ router.post('/save', authCheck, function(req,res){
 
 router.post('/firstsearch',authCheck,function(req,res){
   Articles.find({},function(err,docs){
-      res.send(docs); 
+      res.send(docs);
   })
 })
 
@@ -112,23 +113,37 @@ router.get('/:id', function(req,res){
   Articles.findOne({_id: req.params.id}).then(function(idArticle){
     if(idArticle){
       if(idArticle['visibility']==="public"){
-        var user;
-        if(!req.user)
-          user=false;
-        else
-          user=req.user.codechefId
+        var user=false;
+        var followingBool=false;
 
-        res.render('showIdArticle', {
-          user: user,
-          article: idArticle
+        if(req.user)
+        {
+          user=req.user.codechefId;
+          if(req.user.following.includes(idArticle['author']))
+          {
+            followingBool=true;
+          }
+        }
+
+        User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
+            res.render('showIdArticle', {
+              user: user,
+              article: idArticle,
+              gravatar: md5(authorUser['codechefId']),
+              author: authorUser,
+              followingBool:followingBool
+            });
         });
       }
-      else if(idArticle['visibility']==="friends" && req.user){
+      else if(idArticle['visibility']==="following" && req.user){
         User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
-          if(authorUser['friends'].includes(req.user.codechefId)){
+          if(authorUser['following'].includes(req.user.codechefId)){
             res.render('showIdArticle', {
               user: req.user.codechefId,
-              article: idArticle
+              article: idArticle,
+              gravatar: md5(req.user.codechefId),
+              author: authorUser,
+              followingBool: true
             });
           }
           else{
@@ -149,6 +164,33 @@ router.get('/:id', function(req,res){
     res.redirect('/error.html');
   });
 });
+
+
+// Like an article
+router.post('/like', authCheck, function(req,res){
+  Articles.findOne({_id: req.body.id}).then(function(currArticle){
+
+  })
+  .catch(function(err){
+    console.log(err);
+    res.redirect('/error.html');
+  });
+});
+
+// Dislike an article
+router.post('/dislike', authCheck, function(req,res){
+  Articles.findOneAndUpdate({_id: req.body.id, author: req.user.codechefId},{$set: {title: req.body.title, content: req.body.content, tags: req.body.tags, visibility: req.body.visibility}}).then(function(idArticle){
+      res.redirect('/articles/');
+  })
+  .catch(function(err){
+    console.log(err);
+    res.redirect('/error.html');
+  });
+});
+
+
+
+
 
 
 // Route to show articles of a given user

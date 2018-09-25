@@ -47,6 +47,8 @@
                         color= "orange";
                       else if(number == 7)
                         color= "red";
+                      else
+                        color="grey";
                     %>
                     <% for(var i=0; i < number ; i++) { %>
                       <span <%= "style=color:" + color %> class="fa fa-star checked"></span>
@@ -74,7 +76,7 @@
                       <label>Username:</label>&nbsp;&nbsp;<span class="rating" style="display: inline-block;
                             font-size: 10px;
                             padding: 0 3px;
-			    background-color: <%= color %>;
+			                      background-color: <%= color %>;
                             line-height: 1.3;
                             color: white;
                             margin-right: 2px;"> <%= result['band'][0] %>★</span><span>&nbsp; <%= user %></span>

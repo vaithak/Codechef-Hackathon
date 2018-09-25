@@ -59,8 +59,8 @@ router.post('/retreive', function(req, res){
         if(req.user.codechefId === req.body.username){
           userAsking="onlyMe";
         }
-        else if(currentUser['friends'].includes(req.body.username)){
-          userAsking="friends";
+        else if(currentUser['following'].includes(req.body.username)){
+          userAsking="following";
         }
       }
 

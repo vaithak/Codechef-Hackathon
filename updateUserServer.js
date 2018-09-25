@@ -46,7 +46,8 @@ const job = new CronJob('30 10 */10 * * *', function() {
             var ratings   =  result['result']['data']['content']['ratings'];
             var institute =  result['result']['data']['content']['organization'];
             var band      =  result['result']['data']['content']['band'];
-            User.findOneAndUpdate({'codechefId':username},{$set:{rating:ratings,ranking:rankings,institute:institute,band:band}}, function(err, doc){
+            var fullname  =  result['result']['data']['content']['fullname'];
+            User.findOneAndUpdate({'codechefId':username},{$set:{fullname:fullname,rating:ratings,ranking:rankings,institute:institute,band:band}}, function(err, doc){
               console.log("Updated "+username);
               i++;
               setTimeout(function(){},1000*60*5);

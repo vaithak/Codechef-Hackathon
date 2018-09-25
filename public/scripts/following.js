@@ -26,11 +26,11 @@ $(function() {
     return text === currUser;
   }).addClass("selfUser");
 
-  $(".selfUser").parent().siblings('.removeFriend').remove();
+  $(".selfUser").parent().siblings('.unFollow').remove();
 });
 
 
-$('.removeFriend').on('click',function(){
+$('.unFollow').on('click',function(){
   var userToDelete = $(this).parent().find('.username').html();
 
   if(userToDelete !== currUser)
@@ -39,36 +39,44 @@ $('.removeFriend').on('click',function(){
 
     $.ajax({
        type: "POST",
-       url: "/friends/remove",
+       url: "/following/remove",
        data:{
-         friend: userToDelete
+         unFollow: userToDelete
        },
        success: function(result){
-         console.log(result);
+         if(result == "Login"){
+           window.location.href = "/";
+         }
+         else{
+           console.log(result);
+         }
        }
     });
   }
 });
 
-$('.searchFriend').submit(function(e){
-  var userToAdd = $('input[name=friend]').val();
-  $('input[name=friend]').val("");
-  $('.returnFriendStatus').css("display","none");
+$('.searchFollow').submit(function(e){
+  var userToAdd = $('input[name=follow]').val();
+  $('input[name=follow]').val("");
+  $('.returnFollowStatus').css("display","none");
   var status = confirmed;
 
   $.ajax({
      type: "POST",
-     url: "/friends/add",
+     url: "/following/add",
      data:{
-       friend: userToAdd,
+       follow: userToAdd,
        confirmed: status
      },
      success: function(result){
        // console.log(result);
-       if(result['message']!="Confirm")
+       if(result==="Login"){
+         window.location.href = "/";
+       }
+       else if(result['message']!="Confirm")
        {
-          $('.returnFriendStatus').css("display","inline");
-          $('.returnFriendStatus').html(result['message']);
+          $('.returnFollowStatus').css("display","inline");
+          $('.returnFollowStatus').html(result['message']);
 
           if(result['message']=="Added")
             window.location.reload();
@@ -85,14 +93,14 @@ $('.searchFriend').submit(function(e){
      }
   });
 
-  confirmed=false; // for further adding of friends
+  confirmed=false; // for further following persons
   return false;
 });
 
-$('.confirmFriend').on('click',function(){
+$('.confirmFollow').on('click',function(){
   confirmed = true;
   var userToAdd = $(this).siblings('.username').find('span').html();
-  $('input[name=friend]').val(userToAdd);
-  $('.searchFriend').submit();
+  $('input[name=follow]').val(userToAdd);
+  $('.searchFollow').submit();
   $('.displaySearchResult').css("display","none");
 });

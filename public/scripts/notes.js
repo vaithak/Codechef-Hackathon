@@ -69,7 +69,7 @@ var noteTemp =
 				+ 	 '<textarea class="cnt" placeholder="Enter note description here"></textarea>'
         +     '<select class="form-control">'
         +       '<option value="onlyMe">Visible To Only Me</option>'
-        +       '<option value="friends">Visible To Only My Friends</option>'
+        +       '<option value="following">Visible To People I Follow</option>'
         +       '<option value="public">Visible To Everyone</option>'
         +     '</select>'
 				+	   '</div> '
