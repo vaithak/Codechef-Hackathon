@@ -41,7 +41,7 @@ $(document).ready(function(){
       var bodyContent = tinymce.get('text').getContent();
       var visibility = $('.visibility').val();
       var tags = ($('#tags').val()).split(',');
-      var unSaved = false;
+      unSaved = false;
       $.ajax({
         type: 'POST',
         url: "/articles/edit",
@@ -53,7 +53,7 @@ $(document).ready(function(){
           id: id
         },
         success: function(result){
-          window.location.href = "/articles/"
+          window.location.href = "/articles/" + id
         }
       });
     }

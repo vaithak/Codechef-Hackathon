@@ -112,47 +112,85 @@ router.post('/edit', authCheck, function(req,res){
 router.get('/:id', function(req,res){
   Articles.findOne({_id: req.params.id}).then(function(idArticle){
     if(idArticle){
-      if(idArticle['visibility']==="public"){
-        var user=false;
-        var followingBool=false;
+      var likedBool = false;
+      var dislikedBool = false;
+      var bookmarkedBool = false;
 
-        if(req.user)
-        {
-          user=req.user.codechefId;
-          if(req.user.following.includes(idArticle['author']))
+      if(req.user){
+        User.findOne({codechefId: req.user.codechefId}).then(function(currUser){
+
+          if(currUser['likedArticles'].includes(idArticle['_id'].toString())){
+            likedBool = true;
+          }
+          if(currUser['dislikedArticles'].includes(idArticle['_id'].toString())){
+            dislikedBool = true;
+          }
+          if(currUser['savedArticles'].includes(idArticle['_id'].toString())){
+            bookmarkedBool = true;
+          }
+          if(currUser['following'].includes(idArticle['author'].toString()))
           {
             followingBool=true;
           }
-        }
 
-        User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
-            res.render('showIdArticle', {
-              user: user,
-              article: idArticle,
-              gravatar: md5(authorUser['codechefId']),
-              author: authorUser,
-              followingBool:followingBool
+          if(idArticle['visibility']==="public"){
+            User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
+                res.render('showIdArticle', {
+                  user: req.user.codechefId,
+                  article: idArticle,
+                  gravatar: md5(authorUser['codechefId']),
+                  author: authorUser,
+                  followingBool:followingBool,
+                  likedBool: likedBool,
+                  dislikedBool: dislikedBool,
+                  bookmarkedBool: bookmarkedBool
+                });
             });
-        });
-      }
-      else if(idArticle['visibility']==="following" && req.user){
-        User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
-          if(authorUser['following'].includes(req.user.codechefId)){
+          }
+          else if(idArticle['visibility']==="following"){
+            User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
+              if(authorUser['following'].includes(req.user.codechefId)){
+                res.render('showIdArticle', {
+                  user: req.user.codechefId,
+                  article: idArticle,
+                  gravatar: md5(req.user.codechefId),
+                  author: authorUser,
+                  followingBool: followingBool,
+                  likedBool: likedBool,
+                  dislikedBool: dislikedBool
+                });
+              }
+              else{
+                res.redirect('/articles/');
+              }
+            });
+          }
+          else if((idArticle['visibility']==="onlyMe") && (req.user.codechefId == idArticle['author']) ){
             res.render('showIdArticle', {
               user: req.user.codechefId,
               article: idArticle,
               gravatar: md5(req.user.codechefId),
-              author: authorUser,
-              followingBool: true
+              author: currUser,
+              followingBool: true,
+              likedBool: likedBool,
+              dislikedBool: dislikedBool
             });
           }
-          else{
-            res.redirect('/articles/');
-          }
-        });
+        })
       }
-      else{
-          res.redirect('/articles/');
+      else if(idArticle['visibility']==="public"){
+        User.findOne({codechefId: idArticle['author']}).then(function(authorUser){
+            res.render('showIdArticle', {
+              user: false,
+              article: idArticle,
+              gravatar: md5(authorUser['codechefId']),
+              author: authorUser,
+              followingBool:false,
+              likedBool: false,
+              dislikedBool: false,
+              bookmarkedBool: false
+            });
+        });
       }
     }
     else{
@@ -168,8 +206,54 @@ router.get('/:id', function(req,res){
 
 // Like an article
 router.post('/like', authCheck, function(req,res){
-  Articles.findOne({_id: req.body.id}).then(function(currArticle){
+  User.findOne({codechefId: req.user.codechefId}).then(function(currUser){
+    var id = req.body.id;
+    var currDislikedArticles = currUser['dislikedArticles'];
+    var currLikedArticles = currUser['likedArticles'];
+    var message = "";
 
+    Articles.findOne({_id: id}).then(function(idArticle){
+
+      var currLikes    = idArticle['likes'];
+      var currDislikes = idArticle['dislikes'];
+
+      if(!idArticle){
+          res.redirect('/articles/');
+      }
+      else{
+
+        if(currLikedArticles.includes(id)){
+          currLikedArticles.splice(currLikedArticles.indexOf(id), 1);
+          message = "Removed";
+          currLikes = currLikes - 1;
+        }
+        else{
+          if(currDislikedArticles.includes(id)){
+            currDislikedArticles.splice(currDislikedArticles.indexOf(id), 1);
+            currDislikes = currDislikes - 1;
+          }
+          currLikedArticles.push(id);
+          currLikes = currLikes + 1;
+          message = "Added";
+        }
+
+
+        User.updateOne({codechefId: req.user.codechefId}, {$set: {dislikedArticles: currDislikedArticles, likedArticles: currLikedArticles} }).then(function(){
+          Articles.updateOne({_id: id}, {$set: {likes: currLikes, dislikes: currDislikes} }).then(function(){
+            res.send({
+              message: message,
+              dislikes: currDislikes,
+              likes: currLikes
+            });
+          })
+        })
+        .catch(function(err){
+          console.log(err);
+          res.redirect('/error.html');
+        });
+      }
+
+    })
   })
   .catch(function(err){
     console.log(err);
@@ -177,10 +261,97 @@ router.post('/like', authCheck, function(req,res){
   });
 });
 
+
+
 // Dislike an article
 router.post('/dislike', authCheck, function(req,res){
-  Articles.findOneAndUpdate({_id: req.body.id, author: req.user.codechefId},{$set: {title: req.body.title, content: req.body.content, tags: req.body.tags, visibility: req.body.visibility}}).then(function(idArticle){
-      res.redirect('/articles/');
+  User.findOne({codechefId: req.user.codechefId}).then(function(currUser){
+    var id = req.body.id;
+    var currDislikedArticles = currUser['dislikedArticles'];
+    var currLikedArticles = currUser['likedArticles'];
+    var message = "";
+
+    Articles.findOne({_id: id}).then(function(idArticle){
+
+      var currLikes    = idArticle['likes'];
+      var currDislikes = idArticle['dislikes'];
+
+      if(!idArticle){
+          res.redirect('/articles/');
+      }
+      else{
+
+        if(currDislikedArticles.includes(id)){
+          currDislikedArticles.splice(currDislikedArticles.indexOf(id), 1);
+          message = "Removed";
+          currDislikes = currDislikes - 1;
+        }
+        else{
+          if(currLikedArticles.includes(id)){
+            currLikedArticles.splice(currLikedArticles.indexOf(id), 1);
+            currLikes = currLikes - 1;
+          }
+          currDislikedArticles.push(id);
+          currDislikes = currDislikes + 1;
+          message = "Added";
+        }
+
+
+        User.updateOne({codechefId: req.user.codechefId}, {$set: {dislikedArticles: currDislikedArticles, likedArticles: currLikedArticles} }).then(function(){
+          Articles.updateOne({_id: id}, {$set: {likes: currLikes, dislikes: currDislikes} }).then(function(){
+            res.send({
+              message: message,
+              dislikes: currDislikes,
+              likes: currLikes
+            });
+          })
+        })
+        .catch(function(err){
+          console.log(err);
+          res.redirect('/error.html');
+        });
+      }
+
+    })
+  })
+  .catch(function(err){
+    console.log(err);
+    res.redirect('/error.html');
+  });
+});
+
+
+// Bookmarking an article
+router.post('/bookmark', authCheck, function(req,res){
+  User.findOne({codechefId: req.user.codechefId}).then(function(currUser){
+    var id = req.body.id;
+    var currSavedArticles = currUser['savedArticles'];
+    var message = "";
+
+    Articles.findOne({_id: id}).then(function(idArticle){
+      if(!idArticle)
+        res.redirect('/articles/');
+      else{
+        if(currSavedArticles.includes(id)){
+          currSavedArticles.splice(currSavedArticles.indexOf(id), 1);
+          message = "Removed";
+        }
+        else{
+          currSavedArticles.push(id);
+          message = "Added";
+        }
+
+        User.updateOne({codechefId: req.user.codechefId}, {$set: {savedArticles: currSavedArticles} }).then(function(currUser){
+            res.send({
+              message: message
+            });
+        })
+        .catch(function(err){
+          console.log(err);
+          res.redirect('/error.html');
+        });
+      }
+    })
   })
   .catch(function(err){
     console.log(err);
