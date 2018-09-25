@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+  var unSaved = true;
+  window.onbeforeunload = function() {
+    return unSaved ? "If you leave this page you will lose your unsaved changes." : null;
+  }
+
   tinymce.init({
   selector: 'textarea',
   height: 300,
@@ -36,7 +41,7 @@ $(document).ready(function(){
       var bodyContent = tinymce.get('text').getContent();
       var visibility = $('.visibility').val();
       var tags = ($('#tags').val()).split(',');
-      console.log("fuck you")
+      var unSaved = false;
       $.ajax({
         type: 'POST',
         url: "/articles/edit",

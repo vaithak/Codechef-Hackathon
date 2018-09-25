@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+  var unSaved = true;
+  window.onbeforeunload = function() {
+    return unSaved ? "If you leave this page you will lose your unsaved changes." : null;
+  }
+
   tinymce.init({
   selector: 'textarea',
   height: 300,
@@ -7,10 +12,7 @@ $(document).ready(function(){
   plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help',
   toolbar1: 'formatselect | bold italic sizeselect fontselect fontsizeselect strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | link image',
   image_advtab: true,
-  templates: [
-    { title: 'Test template 1', content: 'Test 1' },
-    { title: 'Test template 2', content: 'Test 2' }
-  ],
+  imagetools_toolbar: "rotateleft rotateright | flipv fliph | editimage imageoptions",
   content_css: [
     'https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
     'https://www.tinymce.com/css/codepen.min.css'
@@ -36,7 +38,8 @@ $(document).ready(function(){
       var bodyContent = tinymce.get('text').getContent();
       var visibility = $('.visibility').val();
       var tags = ($('#tags').val()).split(',');
-
+      var unSaved = false;
+      
       $.ajax({
         type: 'POST',
         url: "/articles/save",
