@@ -6,7 +6,6 @@ function parseData(data, prevDays)
   	for(var j=0; j<prevDays.length; j++)
       {
       	var strDate = formatDate(new Date(data[i]['date'].substr(0,data[i]['date'].indexOf(' '))));
-
       	if(+(new Date(strDate)) == +(new Date(prevDays[j])) )
           {
           	countArr[j]= countArr[j] + 1;
@@ -14,6 +13,8 @@ function parseData(data, prevDays)
           }
       }
   }
+
+	console.log(countArr);
 
   var arr = [];
   for (var i=0; i<prevDays.length; i++) {

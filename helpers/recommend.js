@@ -55,7 +55,7 @@ function increasePractiseScore(problemCategory, practiseLevel){
     }
   ];
 
-  var levelIndex = Math.max(practiseLevel/600 , 5);
+  var levelIndex = Math.min(practiseLevel/600 , 5);
   return incrementScore[levelIndex][problemCategory];
 }
 
@@ -140,7 +140,7 @@ function recommendDifferentProblem(currentUser,accessToken,generateType)
     else if(generateType === "easier"){
       var questionLevel = Math.max(0, currentUser['questionLevel'] - 3);
       // Checking if person has solved the last recommended problem
-      
+
       var options = {
          method: 'GET',
          uri: 'https://api.codechef.com/submissions/?result=AC&username=' + currentUser['codechefId'] + '&problemCode=' + currentUser['lastRecommended']['problemCode'],
