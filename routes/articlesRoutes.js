@@ -16,18 +16,38 @@ const authCheck = function(req, res, next){
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get('/', authCheck, function(req,res){
-  res.render('articles', {
-    user: req.user.codechefId
+// Showing featured Articles
+router.get('/', function(req,res){
+  Articles.find().then(function(articles){
+    articles.sort(function(x,y){
+      return (y['likes'] - y['dislikes']) -  ( x['likes'] - x['dislikes']);
+    });
+    if(req.user){
+      res.render('featured',{
+        articles: articles,
+        user:req.user.codechefId
+      });
+    }
+    else{
+      res.render('featured',{
+        articles: articles,
+        user:false
+      });
+    }
+  })
+  .catch(function(err){
+    res.redirect('/');
   });
 });
 
+// For writing a new article
 router.get('/write', authCheck, function(req,res){
   res.render('writeArticles', {
     user: req.user.codechefId
   });
 });
 
+// Saving an article
 router.post('/save', authCheck, function(req,res){
   new Articles({
       title:      req.body.title,
@@ -199,7 +219,7 @@ router.get('/:id', function(req,res){
   })
   .catch(function(err){
     console.log(err);
-    res.redirect('/error.html');
+    res.redirect('/articles');
   });
 });
 
@@ -260,7 +280,6 @@ router.post('/like', authCheck, function(req,res){
     res.redirect('/error.html');
   });
 });
-
 
 
 // Dislike an article
@@ -360,17 +379,61 @@ router.post('/bookmark', authCheck, function(req,res){
 });
 
 
-
-
-
-
 // Route to show articles of a given user
-// router.get('/users/:username', function(req,res){
-//   Articles.find({author: req.params.username}).then(function(idArticle){
-//     res.render('showUserArticles',{
-//       user: user
-//     });
-//   })
-// });
+router.get('/users/:username/:type', function(req,res){
+  User.findOne({codechefId: req.params.username}).then(function(userAuthor){
+    if((req.params.type === "posted"){
+      Articles.find({author: req.params.username}).then(function(userArticles){
+        if(req.user){
+          res.render('showUserArticles',{
+            userArticles: userArticles,
+            user: req.user.codechefId,
+            author: userAuthor,
+            gravatar: md5(userAuthor['codechefId'])
+          });
+        }
+        else{
+          res.render('showUserArticles',{
+            userArticles: userArticles,
+            user: false,
+            author: userAuthor,
+            gravatar: md5(userAuthor['codechefId'])
+          });
+        }
+      })
+    }
+    // to complete bookmarked and liked
+    else if(req.params.type === "bookmarked"){
+      User.findOne({codechefId: req.params.username}).then(function(currUser){
+        var articles = currUser['savedArticles'];
+        if(req.user){
+          res.render('showUserArticles',{
+            userArticles: currUser['savedArticles'],
+            user: req.user.codechefId,
+            author: userAuthor,
+            gravatar: md5(userAuthor['codechefId'])
+          });
+        }
+        else{
+          res.render('showUserArticles',{
+            userArticles: userArticles,
+            user: false,
+            author: userAuthor,
+            gravatar: md5(userAuthor['codechefId'])
+          });
+        }
+      })
+    }
+    else if(req.params.type === "liked"){
+
+    }
+    else{
+      res.redirect('/articles/');
+    }
+  })
+  .catch(function(err){
+    res.redirect("/articles/");
+  });
+});
 
 module.exports = router;

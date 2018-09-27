@@ -362,6 +362,7 @@ var submissionData = <%- JSON.stringify(resultSubmission) %>;
 
 var prev5Days = Last5Days();
 var newLineData = parseData(submissionData,prev5Days);
+console.log(newLineData);
 drawLineChart(newLineData);
 
 </script>

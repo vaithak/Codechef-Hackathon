@@ -14,8 +14,6 @@ function parseData(data, prevDays)
       }
   }
 
-	console.log(countArr);
-
   var arr = [];
   for (var i=0; i<prevDays.length; i++) {
       arr.push({
@@ -23,6 +21,8 @@ function parseData(data, prevDays)
           value: countArr[i]
       });
   }
+
+	console.log(arr);
 
   return arr;
 }
@@ -68,10 +68,7 @@ var g = svg.append("g")
 var x = d3.scaleTime()
     .rangeRound([20, width-30]);
 
-var y = d3.scaleOrdinal()
-	.domain(data)
-    .range([svgHeight-50,0]);
-
+var y = d3.scaleLinear().rangeRound([height-50, 0]);
 
 var line = d3.line()
     .x(function(d) { return x(d.date)})
