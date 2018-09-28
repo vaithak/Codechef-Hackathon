@@ -60,11 +60,11 @@ router.post('/save', authCheck, function(req,res){
   });
 });
 
-router.post('/firstsearch',authCheck,function(req,res){
-  Articles.find({},function(err,docs){
-      res.send(docs);
-  })
-})
+// router.post('/firstsearch',authCheck,function(req,res){
+//   Articles.find({},function(err,docs){
+//       res.send(docs);
+//   })
+// })
 
 
 router.post('/search',authCheck,function(req,res){
@@ -86,6 +86,9 @@ router.post('/search',authCheck,function(req,res){
   else if(type==="featured")
   {
     Articles.find({tags:{$all:searchquery}},function(err,docs){
+      docs.sort(function(x,y){
+        return (y['likes'] - y['dislikes']) -  ( x['likes'] - x['dislikes']);
+      });
       res.send(docs);
     })
   }
@@ -382,7 +385,7 @@ router.post('/bookmark', authCheck, function(req,res){
 // Route to show articles of a given user
 router.get('/users/:username/:type', function(req,res){
   User.findOne({codechefId: req.params.username}).then(function(userAuthor){
-    if((req.params.type === "posted"){
+    if((req.params.type === "posted")){
       Articles.find({author: req.params.username}).then(function(userArticles){
         if(req.user){
           res.render('showUserArticles',{

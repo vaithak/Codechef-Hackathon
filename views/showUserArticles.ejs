@@ -8,7 +8,11 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat|Poiret+One">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/scripts/showArticles.js"></script>
+    <link rel="stylesheet" type="text/css" href="/styles/showArticles.css">
     <style media="screen">
       .mainBody{
         margin-top: 9%;
@@ -67,11 +71,91 @@
           </center>
           </div>
         </div>
+    </div>
+<!-- Navegación por tabs -->
+<section>
+  <div class="navegation-tabs">
+    <div class="ctn-tabs-links">
+      <button class="ctn-icons-tabs active">
+        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+      </button>
 
-      </div>
+      <button class="ctn-icons-tabs">
+        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+      </button>
+
+      <button class="ctn-icons-tabs">
+        <i class="fa fa-bookmark" aria-hidden="true"></i>
+      </button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <div class="ctn-tabs-contents">
+      <div class="ctn-tabs-contents-item">
 
+        <div id="postedArticles">
+          <% for(var i=0;i< userArticles.length;i++){%>
+              <div class="card" data-card-selectable="true">
+                <div class="card-front">
+                  <div class="card-content">
+                    <a href="/articles/<%=userArticles[i]['id']%>" style="color: inherit;">
+                    <h3><%-userArticles[i]['title']%></h3>
+                    </a>
+                    <p class="blog">
+                      <%-userArticles[i]['content']%>
+                    </p>
+                  </div>
+                </div>
+              </div>
+          </a>
+          <br>
+          <%}%>
+        </div>
+      </div>
+
+      <div class="hide ctn-tabs-contents-item">
+        <div id="likedArticles">
+          <% for(var i=0;i< userLikedArticles.length;i++){%>
+              <div class="card" data-card-selectable="true">
+                <div class="card-front">
+                  <div class="card-content">
+                    <a href="/articles/<%=userLikedArticles[i]['id']%>" style="color: inherit;">
+                    <h3><%-userLikedArticles[i]['title']%></h3>
+                    </a>
+                    <p class="blog">
+                      <%-userLikedArticles[i]['content']%>
+                    </p>
+                  </div>
+                </div>
+              </div>
+          </a>
+          <br>
+          <%}%>
+        </div>
+      </div>
+
+      <div class="hide ctn-tabs-contents-item">
+        <div id="bookmarkedArticles">
+          <% for(var i=0;i< userSavedArticles.length;i++){%>
+              <div class="card" data-card-selectable="true">
+                <div class="card-front">
+                  <div class="card-content">
+                    <a href="/articles/<%=userSavedArticles[i]['id']%>" style="color: inherit;">
+                    <h3><%-userSavedArticles[i]['title']%></h3>
+                    </a>
+                  </div>
+                </div>
+              </div>
+          </a>
+          <br>
+          <%}%>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script id="dsq-count-scr" src="//learnfromchef.disqus.com/count.js" async></script>
   </body>
 </html>
