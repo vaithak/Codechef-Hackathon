@@ -22,16 +22,24 @@ router.get('/', function(req,res){
     articles.sort(function(x,y){
       return (y['likes'] - y['dislikes']) -  ( x['likes'] - x['dislikes']);
     });
+
+    var gravatars = [];
+    for(var i=0;i<articles.length; i++){
+      gravatars.push(md5(articles[i]['author']));
+    }
+
     if(req.user){
       res.render('featured',{
         articles: articles,
-        user:req.user.codechefId
+        user:req.user.codechefId,
+        gravatars: gravatars
       });
     }
     else{
       res.render('featured',{
         articles: articles,
-        user:false
+        user:false,
+        gravatars: gravatars
       });
     }
   })
@@ -60,11 +68,20 @@ router.post('/save', authCheck, function(req,res){
   });
 });
 
+<<<<<<< HEAD
 // router.post('/firstsearch',authCheck,function(req,res){
 //   Articles.find({},function(err,docs){
 //       res.send(docs);
 //   })
 // })
+=======
+
+router.post('/firstsearch',authCheck,function(req,res){
+  Articles.find({},function(err,docs){
+      res.send(docs);
+  })
+})
+>>>>>>> 474ebd9cc822e20cfa423a9ec6700ea72bb2f7ea
 
 
 router.post('/search',authCheck,function(req,res){
@@ -384,50 +401,113 @@ router.post('/bookmark', authCheck, function(req,res){
 
 // Route to show articles of a given user
 router.get('/users/:username/:type', function(req,res){
-  User.findOne({codechefId: req.params.username}).then(function(userAuthor){
-    if((req.params.type === "posted")){
+  User.findOne({codechefId: req.params.username}).then(function(currUser){
+    if(req.params.type === "posted"){
       Articles.find({author: req.params.username}).then(function(userArticles){
         if(req.user){
           res.render('showUserArticles',{
-            userArticles: userArticles,
+            articles: userArticles,
             user: req.user.codechefId,
-            author: userAuthor,
-            gravatar: md5(userAuthor['codechefId'])
+            currUser: currUser,
+            gravatar: md5(currUser['codechefId'])
           });
         }
         else{
           res.render('showUserArticles',{
-            userArticles: userArticles,
+            articles: userArticles,
             user: false,
-            author: userAuthor,
-            gravatar: md5(userAuthor['codechefId'])
+            author: currUser,
+            gravatar: md5(currUser['codechefId'])
           });
         }
       })
     }
     // to complete bookmarked and liked
     else if(req.params.type === "bookmarked"){
-      User.findOne({codechefId: req.params.username}).then(function(currUser){
         var articles = currUser['savedArticles'];
-        if(req.user){
-          res.render('showUserArticles',{
-            userArticles: currUser['savedArticles'],
-            user: req.user.codechefId,
-            author: userAuthor,
-            gravatar: md5(userAuthor['codechefId'])
-          });
+
+        if(articles.length == 0){
+          var savedArticles = [];
+          if(req.user){
+            res.render('showUserArticles',{
+              articles: savedArticles,
+              user: req.user.codechefId,
+              currUser: currUser,
+              gravatar: md5(currUser['codechefId'])
+            });
+          }
+          else{
+            res.render('showUserArticles',{
+              articles: savedArticles,
+              user: false,
+              currUser: currUser,
+              gravatar: md5(currUser['codechefId'])
+            });
+          }
         }
         else{
-          res.render('showUserArticles',{
-            userArticles: userArticles,
-            user: false,
-            author: userAuthor,
-            gravatar: md5(userAuthor['codechefId'])
-          });
+          Articles.find({_id: {$in: articles}}).then(function(savedArticles){
+            if(req.user){
+              res.render('showUserArticles',{
+                articles: savedArticles,
+                user: req.user.codechefId,
+                currUser: currUser,
+                gravatar: md5(currUser['codechefId'])
+              });
+            }
+            else{
+              res.render('showUserArticles',{
+                articles: savedArticles,
+                user: false,
+                currUser: currUser,
+                gravatar: md5(currUser['codechefId'])
+              });
+            }
+          })
         }
-      })
     }
     else if(req.params.type === "liked"){
+        var articles = currUser['likedArticles'];
+
+        if(articles.length == 0){
+          var likedArticles = [];
+          if(req.user){
+            res.render('showUserArticles',{
+              articles: likedArticles,
+              user: req.user.codechefId,
+              currUser: currUser,
+              gravatar: md5(currUser['codechefId'])
+            });
+          }
+          else{
+            res.render('showUserArticles',{
+              articles: likedArticles,
+              user: false,
+              currUser: currUser,
+              gravatar: md5(currUser['codechefId'])
+            });
+          }
+        }
+        else{
+          Articles.find({_id: {$in: articles}}).then(function(likedArticles){
+            if(req.user){
+              res.render('showUserArticles',{
+                articles: likedArticles,
+                user: req.user.codechefId,
+                currUser: currUser,
+                gravatar: md5(currUser['codechefId'])
+              });
+            }
+            else{
+              res.render('showUserArticles',{
+                articles: likedArticles,
+                user: false,
+                currUser: currUser,
+                gravatar: md5(currUser['codechefId'])
+              });
+            }
+          })
+        }
 
     }
     else{

@@ -36,7 +36,7 @@ mongoose.connect(keys.mongodb.dbURI,{ useNewUrlParser: true }, function(err) {
   if(err)
   {
     throw err;
-    exit();
+    process.exit(0);
   }
 
   console.log('connected to mongodb');
