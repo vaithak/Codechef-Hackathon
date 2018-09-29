@@ -68,12 +68,11 @@ router.post('/save', authCheck, function(req,res){
   });
 });
 
-
-router.post('/firstsearch',authCheck,function(req,res){
-  Articles.find({},function(err,docs){
-      res.send(docs);
-  })
-})
+// router.post('/firstsearch',authCheck,function(req,res){
+//   Articles.find({},function(err,docs){
+//       res.send(docs);
+//   })
+// })
 
 
 router.post('/search',authCheck,function(req,res){
@@ -95,6 +94,9 @@ router.post('/search',authCheck,function(req,res){
   else if(type==="featured")
   {
     Articles.find({tags:{$all:searchquery}},function(err,docs){
+      docs.sort(function(x,y){
+        return (y['likes'] - y['dislikes']) -  ( x['likes'] - x['dislikes']);
+      });
       res.send(docs);
     })
   }
@@ -397,7 +399,8 @@ router.get('/users/:username/:type', function(req,res){
           res.render('showUserArticles',{
             articles: userArticles,
             user: req.user.codechefId,
-            currUser: currUser,
+            author: currUser,
+            type: "posted",
             gravatar: md5(currUser['codechefId'])
           });
         }
@@ -406,6 +409,7 @@ router.get('/users/:username/:type', function(req,res){
             articles: userArticles,
             user: false,
             author: currUser,
+            type:"posted",
             gravatar: md5(currUser['codechefId'])
           });
         }
@@ -421,15 +425,17 @@ router.get('/users/:username/:type', function(req,res){
             res.render('showUserArticles',{
               articles: savedArticles,
               user: req.user.codechefId,
-              currUser: currUser,
+              author: currUser,
+              type:"bookmark",
               gravatar: md5(currUser['codechefId'])
             });
           }
           else{
             res.render('showUserArticles',{
               articles: savedArticles,
+              type:"bookmark",
               user: false,
-              currUser: currUser,
+              author: currUser,
               gravatar: md5(currUser['codechefId'])
             });
           }
@@ -439,16 +445,18 @@ router.get('/users/:username/:type', function(req,res){
             if(req.user){
               res.render('showUserArticles',{
                 articles: savedArticles,
+                type:"bookmark",
                 user: req.user.codechefId,
-                currUser: currUser,
+                author: currUser,
                 gravatar: md5(currUser['codechefId'])
               });
             }
             else{
               res.render('showUserArticles',{
                 articles: savedArticles,
+                type:"bookmark",
                 user: false,
-                currUser: currUser,
+                author: currUser,
                 gravatar: md5(currUser['codechefId'])
               });
             }
@@ -463,16 +471,18 @@ router.get('/users/:username/:type', function(req,res){
           if(req.user){
             res.render('showUserArticles',{
               articles: likedArticles,
+              type:"liked",
               user: req.user.codechefId,
-              currUser: currUser,
+              author: currUser,
               gravatar: md5(currUser['codechefId'])
             });
           }
           else{
             res.render('showUserArticles',{
               articles: likedArticles,
+              type:"liked",
               user: false,
-              currUser: currUser,
+              author: currUser,
               gravatar: md5(currUser['codechefId'])
             });
           }
@@ -482,16 +492,18 @@ router.get('/users/:username/:type', function(req,res){
             if(req.user){
               res.render('showUserArticles',{
                 articles: likedArticles,
+                type:"liked",
                 user: req.user.codechefId,
-                currUser: currUser,
+                author: currUser,
                 gravatar: md5(currUser['codechefId'])
               });
             }
             else{
               res.render('showUserArticles',{
                 articles: likedArticles,
+                type:"liked",
                 user: false,
-                currUser: currUser,
+                author: currUser,
                 gravatar: md5(currUser['codechefId'])
               });
             }
