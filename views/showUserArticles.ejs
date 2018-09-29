@@ -76,81 +76,64 @@
 <section>
   <div class="navegation-tabs">
     <div class="ctn-tabs-links">
-      <button class="ctn-icons-tabs active">
+      <a href="/articles/users/<%= author['codechefId'] %>/posted"%>
+      <button class="ctn-icons-tabs <% if(type==="posted"){%><%='active'%><%}%>">
         <i class="fa fa-newspaper-o" aria-hidden="true"></i>
       </button>
+    </a>
 
-      <button class="ctn-icons-tabs">
+      <a href="/articles/users/<%= author['codechefId'] %>/liked"%>
+      <button class="ctn-icons-tabs <% if(type==="liked"){%><%='active'%><%}%>">
         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
       </button>
+    </a>
 
-      <button class="ctn-icons-tabs">
+      <a href="/articles/users/<%= author['codechefId'] %>/bookmarked"%>
+      <button class="ctn-icons-tabs <% if(type==="bookmark"){%><%='active'%><%}%>">
         <i class="fa fa-bookmark" aria-hidden="true"></i>
       </button>
+    </a>
     </div>
 
     <div class="ctn-tabs-contents">
       <div class="ctn-tabs-contents-item">
 
-        <div id="postedArticles">
-          <% for(var i=0;i< userArticles.length;i++){%>
-              <div class="card" data-card-selectable="true">
-                <div class="card-front">
-                  <div class="card-content">
-                    <a href="/articles/<%=userArticles[i]['id']%>" style="color: inherit;">
-                    <h3><%-userArticles[i]['title']%></h3>
-                    </a>
-                    <p class="blog">
-                      <%-userArticles[i]['content']%>
-                    </p>
-                  </div>
-                </div>
-              </div>
-          </a>
-          <br>
+<div class="projcard-container">
+<% for(var i=0;i < articles.length;i++){
+    var rex = /<img[^>]+src="?[^"\s]+"?[^/>]*\/>/g;
+    var m=rex.exec(articles[i]['content']);
+    var color=['blue','red','green','pink'];%>
+<a href="#" color="inherit"><i class="fa fa-2x fa-bookmark<%= '-o' %>" id="bookmark" style="color: <%= 'black' %>;float: right;z-index: 1;font-size: 44px;" aria-hidden="true"></i></a>
+    <a <%='href='+articles[i]['id']%>>
+  <div <%- 'class="projcard projcard-'+color[i%4]+'"'%>>
+    <div class="projcard-innerbox">
+      <div class="projcard-img">
+      <% if(m){%>
+      <%- m %>
+      <%}%> 
+    </div>
+      <div class="projcard-textbox">
+        <div class="projcard-title"><%=articles[i].title%></div>
+        <div class="projcard-subtitle">By :- <%=articles[i].author%></div>
+        <div class="projcard-bar"></div>
+        <div class="projcard-description"><%-articles[i].content%></div>
+        <div class="projcard-tagbox">
+          <% for(var j=0;j< Math.min(articles[i]['tags'].length,3);j++){%>
+          <span class="projcard-tag"><%=articles[i]['tags'][j]%></span>
           <%}%>
+          <div>
+          <i class="fa" style="z-index: 1;font-size: 28px;" aria-hidden="true">&#xf087;</i><%=articles[i]['likes']%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa" style="z-index: 1;font-size: 28px;color: inherit;" aria-hidden="true">&#xf088;</i><%=articles[i]['dislikes']%>
         </div>
-      </div>
-
-      <div class="hide ctn-tabs-contents-item">
-        <div id="likedArticles">
-          <% for(var i=0;i< userLikedArticles.length;i++){%>
-              <div class="card" data-card-selectable="true">
-                <div class="card-front">
-                  <div class="card-content">
-                    <a href="/articles/<%=userLikedArticles[i]['id']%>" style="color: inherit;">
-                    <h3><%-userLikedArticles[i]['title']%></h3>
-                    </a>
-                    <p class="blog">
-                      <%-userLikedArticles[i]['content']%>
-                    </p>
-                  </div>
-                </div>
-              </div>
-          </a>
-          <br>
-          <%}%>
         </div>
-      </div>
-
-      <div class="hide ctn-tabs-contents-item">
-        <div id="bookmarkedArticles">
-          <% for(var i=0;i< userSavedArticles.length;i++){%>
-              <div class="card" data-card-selectable="true">
-                <div class="card-front">
-                  <div class="card-content">
-                    <a href="/articles/<%=userSavedArticles[i]['id']%>" style="color: inherit;">
-                    <h3><%-userSavedArticles[i]['title']%></h3>
-                    </a>
-                  </div>
-                </div>
-              </div>
-          </a>
-          <br>
-          <%}%>
-        </div>
+ 
       </div>
     </div>
+  </div>
+</a>
+  <%}%>
+      </div>
+    </div>
+      </div>
   </div>
 </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>

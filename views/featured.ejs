@@ -25,27 +25,33 @@
     var rex = /<img[^>]+src="?[^"\s]+"?[^/>]*\/>/g;
     var m=rex.exec(articles[i]['content']);
     var color=['blue','red','green','pink'];%>
+<a href="#" color="inherit"><i class="fa fa-2x fa-bookmark<%= '-o' %>" id="bookmark" style="color: <%= 'black' %>;float: right;z-index: 1;font-size: 44px;" aria-hidden="true"></i></a>
+
     <a <%='href='+articles[i]['id']%>>
   <div <%- 'class="projcard projcard-'+color[i%4]+'"'%>>
     <div class="projcard-innerbox">
+      <div class="projcard-img">
       <% if(m){%>
       <%- m %>
       <%}%> 
+    </div>
       <div class="projcard-textbox">
         <div class="projcard-title"><%=articles[i].title%></div>
         <div class="projcard-subtitle">By :- <%=articles[i].author%></div>
         <div class="projcard-bar"></div>
         <div class="projcard-description"><%-articles[i].content%></div>
         <div class="projcard-tagbox">
-          <% for(var j=0;j< Math.min(articles[i]['tags'].length,3);j++){%>
+          <% for(var j=0;j< Math.min(articles[i]['tags'].length,4);j++){%>
           <span class="projcard-tag"><%=articles[i]['tags'][j]%></span>
           <%}%>
+          <div>
+          <i class="fa" style="z-index: 1;font-size: 28px;" aria-hidden="true">&#xf087;</i><%=articles[i]['likes']%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa" style="z-index: 1;font-size: 28px;color: inherit;" aria-hidden="true">&#xf088;</i><%=articles[i]['dislikes']%>
         </div>
-        <i class="fa fa-2x fa-bookmark<%= '-o' %>" id="bookmark" style="color: <%= 'black' %>;float: right;z-index: 10000;" aria-hidden="true" onclick="bookmark();"></i>
+        </div>
       </div>
     </div>
   </div>
-</a>
+</a>    
   <%}%>
   
 </div>
