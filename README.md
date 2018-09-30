@@ -8,6 +8,7 @@ Team submission for CodeChef and Alibaba Hackathon.
   * ExpressJS
   * mongodb
   * d3.js
+  * EJS as template engine
   * Alibaba Elastic Compute Service
   * Alibaba AsparaDB for MongoDB
   * Codechef Problems and User Stats
