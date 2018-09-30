@@ -29,15 +29,19 @@ router.get('/', function(req,res){
     }
 
     if(req.user){
-      res.render('featured',{
-        articles: articles,
-        user:req.user.codechefId,
-        gravatars: gravatars
-      });
+      User.findOne({codechefId: req.user.codechefId}).then(function(askingUser){
+        res.render('featured',{
+          articles: articles,
+          bookmarkedArticles: askingUser['savedArticles'],
+          user:req.user.codechefId,
+          gravatars: gravatars
+        });
+      })
     }
     else{
       res.render('featured',{
         articles: articles,
+        bookmarkedArticles: false,
         user:false,
         gravatars: gravatars
       });
@@ -358,18 +362,21 @@ router.get('/users/:username/:type', function(req,res){
     if(req.params.type === "posted"){
       Articles.find({author: req.params.username}).then(function(userArticles){
         if(req.user){
-          res.render('showUserArticles',{
-            articles: userArticles,
-            user: req.user.codechefId,
-            author: currUser,
-            type: "posted",
-            gravatar: md5(currUser['codechefId'])
-          });
+          User.findOne({codechefId: req.user.codechefId}).then(function(askingUser){
+            res.render('showUserArticles',{
+              articles: userArticles,
+              user: req.user.codechefId,
+              bookmarkedArticles: askingUser['savedArticles'],
+              author: currUser,
+              type: "posted",
+              gravatar: md5(currUser['codechefId'])
+            });
+          })
         }
         else{
           res.render('showUserArticles',{
             articles: userArticles,
-            bookmarkedArticles: false,
+            bookmarkedArticles: [],
             user: false,
             author: currUser,
             type:"posted",
@@ -385,19 +392,22 @@ router.get('/users/:username/:type', function(req,res){
         if(articles.length == 0){
           var savedArticles = [];
           if(req.user){
-            res.render('showUserArticles',{
-              articles: savedArticles,
-              bookmarkedArticles: currUser['savedArticles'],
-              user: req.user.codechefId,
-              author: currUser,
-              type:"bookmark",
-              gravatar: md5(currUser['codechefId'])
-            });
+            User.findOne({codechefId: req.user.codechefId}).then(function(askingUser){
+              res.render('showUserArticles',{
+                articles: savedArticles,
+                bookmarkedArticles: askingUser['savedArticles'],
+                user: req.user.codechefId,
+                author: currUser,
+                type:"bookmark",
+                gravatar: md5(currUser['codechefId'])
+              });
+            })
           }
           else{
             res.render('showUserArticles',{
               articles: savedArticles,
               type:"bookmark",
+              bookmarkedArticles: [],
               user: false,
               author: currUser,
               gravatar: md5(currUser['codechefId'])
@@ -407,18 +417,22 @@ router.get('/users/:username/:type', function(req,res){
         else{
           Articles.find({_id: {$in: articles}}).then(function(savedArticles){
             if(req.user){
-              res.render('showUserArticles',{
-                articles: savedArticles,
-                type:"bookmark",
-                user: req.user.codechefId,
-                author: currUser,
-                gravatar: md5(currUser['codechefId'])
-              });
+              User.findOne({codechefId: req.user.codechefId}).then(function(askingUser){
+                res.render('showUserArticles',{
+                  articles: savedArticles,
+                  type:"bookmark",
+                  user: req.user.codechefId,
+                  bookmarkedArticles: askingUser['savedArticles'],
+                  author: currUser,
+                  gravatar: md5(currUser['codechefId'])
+                });
+              })
             }
             else{
               res.render('showUserArticles',{
                 articles: savedArticles,
                 type:"bookmark",
+                bookmarkedArticles: [],
                 user: false,
                 author: currUser,
                 gravatar: md5(currUser['codechefId'])
@@ -433,18 +447,22 @@ router.get('/users/:username/:type', function(req,res){
         if(articles.length == 0){
           var likedArticles = [];
           if(req.user){
-            res.render('showUserArticles',{
-              articles: likedArticles,
-              type:"liked",
-              user: req.user.codechefId,
-              author: currUser,
-              gravatar: md5(currUser['codechefId'])
-            });
+            User.findOne({codechefId: req.user.codechefId}).then(function(askingUser){
+              res.render('showUserArticles',{
+                articles: likedArticles,
+                type:"liked",
+                user: req.user.codechefId,
+                bookmarkedArticles: askingUser['savedArticles'],
+                author: currUser,
+                gravatar: md5(currUser['codechefId'])
+              });
+            })
           }
           else{
             res.render('showUserArticles',{
               articles: likedArticles,
               type:"liked",
+              bookmarkedArticles: [],
               user: false,
               author: currUser,
               gravatar: md5(currUser['codechefId'])
@@ -454,19 +472,23 @@ router.get('/users/:username/:type', function(req,res){
         else{
           Articles.find({_id: {$in: articles}}).then(function(likedArticles){
             if(req.user){
-              res.render('showUserArticles',{
-                articles: likedArticles,
-                type:"liked",
-                user: req.user.codechefId,
-                author: currUser,
-                gravatar: md5(currUser['codechefId'])
-              });
+              User.findOne({codechefId: req.user.codechefId}).then(function(askingUser){
+                res.render('showUserArticles',{
+                  articles: likedArticles,
+                  type:"liked",
+                  bookmarkedArticles: askingUser['savedArticles'],
+                  user: req.user.codechefId,
+                  author: currUser,
+                  gravatar: md5(currUser['codechefId'])
+                });
+              })
             }
             else{
               res.render('showUserArticles',{
                 articles: likedArticles,
                 type:"liked",
                 user: false,
+                bookmarkedArticles: [],
                 author: currUser,
                 gravatar: md5(currUser['codechefId'])
               });

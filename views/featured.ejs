@@ -18,12 +18,19 @@
 
 <div class="projcard-container">
 <% for(var i=0;i < articles.length;i++){
+    var bookmarkColor="black";
+    var bookmarkClass="-o";
+    if(bookmarkedArticles.includes(articles[i]['id'])) {
+      bookmarkColor="blue";
+      bookmarkClass="";
+    }
+
     var rex = /<img[^>]+src="?[^"\s]+"?[^/>]*\/>/g;
     var m=rex.exec(articles[i]['content']);
     var color=['blue','red','green','pink'];%>
-<a href="#" color="inherit"><i class="fa fa-2x fa-bookmark<%= '-o' %>" id="bookmark" style="color: <%= 'black' %>;float: right;z-index: 1;font-size: 44px;" aria-hidden="true"></i></a>
+    <a color="inherit"><i class="bookmark fa fa-2x fa-bookmark<%= bookmarkClass %>" style="color: <%= bookmarkColor %>;float: right;z-index: 1;font-size: 44px;" aria-hidden="true"></i></a>
 
-    <a <%='href='+articles[i]['id']%>>
+    <a class="theArticle" <%='href='+articles[i]['id']%>>
   <div <%- 'class="projcard projcard-'+color[i%4]+'"'%>>
     <div class="projcard-innerbox">
       <div class="projcard-img">
