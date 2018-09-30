@@ -55,7 +55,7 @@ function increasePractiseScore(problemCategory, practiseLevel){
     }
   ];
 
-  var levelIndex = Math.min(practiseLevel/600 , 5);
+  var levelIndex = Math.min(Math.floor(practiseLevel/600) , 5);
   return incrementScore[levelIndex][problemCategory];
 }
 

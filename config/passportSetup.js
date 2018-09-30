@@ -23,7 +23,7 @@ var strategy = new OAuth2Strategy({
    state:             Math.random().toString(36).replace('0.', '')
   },
   function(accessToken, refreshToken, params,profile, done) {
-
+    // console.log(params)
     refreshToken = params['result']['data']['refresh_token'];
     accessToken = params['result']['data']['access_token'];
 
@@ -71,8 +71,9 @@ var strategy = new OAuth2Strategy({
     })
     .catch(function (err) {
         // API call failed...
-        throw err;
         console.log("Request error" + err);
+        res.redirect('/error.html');
+        console.log("Redirecting");
     });
 
   }

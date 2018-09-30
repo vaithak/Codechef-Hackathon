@@ -68,44 +68,6 @@ router.post('/save', authCheck, function(req,res){
   });
 });
 
-// router.post('/firstsearch',authCheck,function(req,res){
-//   Articles.find({},function(err,docs){
-//       res.send(docs);
-//   })
-// })
-
-
-router.post('/search',authCheck,function(req,res){
-  var searchquery=req.body.searchquery;
-  var type=req.body.type;
-  var data={};
-  if(type === "your")
-  {
-    Articles.find({author:req.user.codechefId,tags:{$all:searchquery}},function(err,docs){
-      data=docs;
-      res.send(data);
-    });
-  }
-  else if(type==="saved")
-  {
-    //currently don't work
-    // res.send(req.user.articles);
-  }
-  else if(type==="featured")
-  {
-    Articles.find({tags:{$all:searchquery}},function(err,docs){
-      docs.sort(function(x,y){
-        return (y['likes'] - y['dislikes']) -  ( x['likes'] - x['dislikes']);
-      });
-      res.send(docs);
-    })
-  }
-  else{
-    res.redirect("/error.html");
-  }
-
-});
-
 // Route to edit an Article
 router.get('/edit', authCheck, function(req,res){
   Articles.findOne({_id: req.query.id, author: req.user.codechefId}).then(function(idArticle){
@@ -407,6 +369,7 @@ router.get('/users/:username/:type', function(req,res){
         else{
           res.render('showUserArticles',{
             articles: userArticles,
+            bookmarkedArticles: false,
             user: false,
             author: currUser,
             type:"posted",
@@ -424,6 +387,7 @@ router.get('/users/:username/:type', function(req,res){
           if(req.user){
             res.render('showUserArticles',{
               articles: savedArticles,
+              bookmarkedArticles: currUser['savedArticles'],
               user: req.user.codechefId,
               author: currUser,
               type:"bookmark",
