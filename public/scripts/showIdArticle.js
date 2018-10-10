@@ -9,15 +9,12 @@ $(document).ready(function(){
            follow: id,
            confirmed: true
          },
-         context: this,
          success: function(result){
            if(result == "Login"){
              window.location.href = "/";
            }
            else{
-             $(this).attr('id', "alreadyFollowing");
-             $(this).attr('class',"btn btn-sm btn-basic");
-             $(this > 'button').html("Following");
+             window.location.reload();
            }
          }
       });
