@@ -9,6 +9,7 @@ $(document).ready(function(){
            follow: id,
            confirmed: true
          },
+         context: this,
          success: function(result){
            if(result == "Login"){
              window.location.href = "/";

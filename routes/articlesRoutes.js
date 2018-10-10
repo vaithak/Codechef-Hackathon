@@ -112,6 +112,7 @@ router.get('/:id', function(req,res){
       var likedBool = false;
       var dislikedBool = false;
       var bookmarkedBool = false;
+      var followingBool = false;
 
       if(req.user){
         User.findOne({codechefId: req.user.codechefId}).then(function(currUser){
