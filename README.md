@@ -15,7 +15,7 @@ Team submission for CodeChef and Alibaba Hackathon.
   * jQuery
   * Bootstrap v3
   
-#### Main Server - [http://149.129.137.202](http://149.129.137.202)  
+#### Main Server - [http://149.129.134.162](http://149.129.134.162)  
 #### Jobs Server - [http://149.129.135.191](http://149.129.135.191)  
 
 #### [Youtube Video Link](https://www.youtube.com/watch?v=NrkwH1ECS7A) 
