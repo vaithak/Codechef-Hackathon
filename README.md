@@ -16,7 +16,7 @@ Team submission for CodeChef and Alibaba Hackathon.
   * Bootstrap v3
   
 #### Main Server - [http://149.129.134.162](http://149.129.134.162)  
-#### Jobs Server - [http://149.129.135.191](http://149.129.135.191)  
+#### Jobs Server - [http://149.129.145.251](http://149.129.145.251)  
 
 #### [Youtube Video Link](https://www.youtube.com/watch?v=NrkwH1ECS7A) 
 #### [Presentation](https://docs.google.com/presentation/d/1yHZEQu3BkccMclj8BzBw7bHZ7lOVW7lQRhZgwDRDbkU/edit?usp=sharing)   
