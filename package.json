@@ -28,7 +28,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "md5": "^2.2.1",
-    "mongoose": "^5.2.13",
+    "mongoose": "^5.7.5",
     "nodemailer": "latest",
     "particles.js": "^2.0.0",
     "passport": "^0.4.0",
